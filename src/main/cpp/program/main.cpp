@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 
-using namespace SetmyInfo;
+using namespace SetMyInfo;
 using namespace std;
 
 extern char** environ;

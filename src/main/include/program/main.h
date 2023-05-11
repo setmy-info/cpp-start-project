@@ -1,8 +1,8 @@
-#ifndef SETMYINFO_MAIN_H
-#define SETMYINFO_MAIN_H
+#ifndef SET_MY_INFO_MAIN_H
+#define SET_MY_INFO_MAIN_H
 
-namespace SetmyInfo {
+namespace SetMyInfo {
 
 }
 
-#endif // SETMYINFO_MAIN_H
+#endif // SET_MY_INFO_MAIN_H
