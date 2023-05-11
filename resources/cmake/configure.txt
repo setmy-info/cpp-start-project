@@ -1,6 +1,5 @@
 # PLACEHOLDER-BEGIN #
 
-CONFIGURE_FILE("${MAIN_SH_SOURCES_PATH}/lib/smi-location.in" "${BINARY_OUTPUT_PATH}/smi-location")
-CONFIGURE_FILE("${MAIN_SH_SOURCES_PATH}/lib/base.sh.in"      "${LIBRARY_OUTPUT_PATH}/base.sh")
+CONFIGURE_FILE("${MAIN_INCLUDES_PATH}/version.h.in" "${INCLUDE_OUTPUT_PATH}/version.h")
 
 # PLACEHOLDER-END #

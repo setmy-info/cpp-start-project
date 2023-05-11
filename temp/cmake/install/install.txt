@@ -1,0 +1,10 @@
+# PLACEHOLDER-BEGIN #
+
+INCLUDE(${MAIN_RESOURCES_PATH}/cmake/install/bin.install.txt)
+INCLUDE(${MAIN_RESOURCES_PATH}/cmake/install/lib.install.txt)
+INCLUDE(${MAIN_RESOURCES_PATH}/cmake/install/etc.install.txt)
+INCLUDE(${MAIN_RESOURCES_PATH}/cmake/install/man.install.txt)
+INCLUDE(${MAIN_RESOURCES_PATH}/cmake/install/doc.install.txt)
+INCLUDE(${MAIN_RESOURCES_PATH}/cmake/install/include.install.txt)
+
+# PLACEHOLDER-END #

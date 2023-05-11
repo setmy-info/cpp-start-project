@@ -1,0 +1,43 @@
+# PLACEHOLDER-BEGIN #
+
+SET (CMAKE_VERBOSE_MAKEFILE TRUE)
+
+IF(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+# Just example
+ENDIF()
+
+ADD_CUSTOM_TARGET(build             ALL)
+ADD_CUSTOM_TARGET(clear             )
+
+ADD_CUSTOM_TARGET(dirs
+    mkdir -p ${DESTINATION_PATH} &&
+    mkdir -p ${MAN_OUTPUT_PATH}/man1 &&
+    mkdir -p ${INFO_OUTPUT_PATH} &&
+    mkdir -p ${INCLUDE_OUTPUT_PATH} &&
+    mkdir -p ${LIBRARY_OUTPUT_PATH} &&
+    mkdir -p ${DOC_OUTPUT_PATH}
+)
+
+#ADD_CUSTOM_TARGET(clean)
+ADD_CUSTOM_TARGET(javah       javac -h ${MAIN_SOURCES_PATH}/cpp/include ../cmake-java-lib/src/main/java/info/setmy/jni/example/Example.java && rm -rf ../cmake-java-lib/src/main/java/info/setmy/jni/example/*.class)
+ADD_CUSTOM_TARGET(includes    cp ${MAIN_SOURCES_PATH}/cpp/include/Development.h ${INCLUDE_OUTPUT_PATH}/Development.h)
+ADD_CUSTOM_TARGET(docs        cp ${MAIN_SOURCES_PATH}/doc/example.txt ${DOC_OUTPUT_PATH}/example.txt)
+ADD_CUSTOM_TARGET(gzipman     cp ${MAIN_SOURCES_PATH}/man/*.1 ${MAN_OUTPUT_PATH}/man1 && gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
+ADD_CUSTOM_TARGET(analysis    echo cccc ${MAIN_SOURCES_PATH}/cpp/*.cpp .${MAIN_SOURCES_PATH}/cpp/include/*.h WORKING_DIRECTORY ./)
+ADD_CUSTOM_TARGET(cppcheck    cppcheck -v --xml --xml-version=2 --enable=all -I ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/src 2> check.xml WORKING_DIRECTORY ./)
+ADD_CUSTOM_TARGET(debuging    ./debug DEPENDS test.bin WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+ADD_CUSTOM_TARGET(valgrind    ./valgrind-test DEPENDS test.bin WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+ADD_CUSTOM_TARGET(doxygen     doxygen)
+ADD_CUSTOM_TARGET(buildClear  rm -rf ${TARGET_PATH})
+ADD_CUSTOM_TARGET(pkgClear    rm -rf ./${PROJECT_NAME}*.tar.gz ./${PROJECT_NAME}*.rpm ./${PROJECT_NAME}*.sh ./${PROJECT_NAME}*.deb ./${PROJECT_NAME}*.tar.Z ./${PROJECT_NAME}*.7z ./${PROJECT_NAME}*.tar.bz2 ./${PROJECT_NAME}*.tar.xz ./${PROJECT_NAME}*.zip)
+ADD_CUSTOM_TARGET(cmakeClear  rm -rf ./*.cmake ./_CPack_Packages install_manifest.txt CMakeCache.txt ${RESOURCES_PATH}/CMakeFiles)
+
+ADD_EXECUTABLE(example.bin      ${PROJECT_MODULE_APPLICATION_SOURCES})
+ADD_EXECUTABLE(test.bin         ${PROJECT_MODULE_TEST_SOURCES})
+ADD_LIBRARY(examplestatic       STATIC ${PROJECT_MODULE_LIBRARY_SOURCES})
+ADD_LIBRARY(exampleshared       SHARED ${PROJECT_MODULE_LIBRARY_SOURCES})
+
+TARGET_LINK_LIBRARIES(example.bin "${EXAMPLE_LINKING}")
+TARGET_LINK_LIBRARIES(test.bin    "${EXAMPLE_TEST_LINKING}")
+
+# PLACEHOLDER-END #

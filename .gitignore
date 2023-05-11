@@ -12,3 +12,7 @@ _deps
 .cproject
 .project
 .settings/
+CPackConfig.cmake
+CPackSourceConfig.cmake
+build/
+

@@ -1,0 +1,8 @@
+# PLACEHOLDER-BEGIN #
+
+ADD_TEST(FuncoTest               ${BINARY_OUTPUT_PATH}/example-test  --run_test=FuncoTest)
+ADD_TEST(ApplicationTest         ${BINARY_OUTPUT_PATH}/example-test  --run_test=ApplicationTest)
+ADD_TEST(ValgrindFuncoTest       ${BINARY_OUTPUT_PATH}/valgrind-test --run_test=FuncoTest)
+ADD_TEST(ValgrindApplicationTest ${BINARY_OUTPUT_PATH}/valgrind-test --run_test=ApplicationTest)
+
+# PLACEHOLDER-END #
