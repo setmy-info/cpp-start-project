@@ -2,15 +2,15 @@ cmake_minimum_required (VERSION 3.26.3)
 
 # PLACEHOLDER-BEGIN #
 
-PROJECT (setmy-info-scripts)
+PROJECT (cpp-start-project)
 
 SET (PROJECT_VERSION_MAJOR              0)
 SET (PROJECT_VERSION_MINOR              0)
 SET (PROJECT_VERSION_PATCH              0)
 SET (PROJECT_VERSION_TWEAK              0)
 
-SET (PROJECT_DESCRIPTION_SUMMARY        "setmy.info scripts")
-SET (PROJECT_DESCRIPTION                "setmy.info scripts Installation Example")
+SET (PROJECT_DESCRIPTION_SUMMARY        "setmy.info cpp start project")
+SET (PROJECT_DESCRIPTION                "setmy.info cpp start project example")
 SET (PROJECT_VENDOR                     "Hear And See Systems LLC")
 SET (PROJECT_MAINTAINER                 "Imre Tabur <imre.tabur@mail.ee>")
 SET (PROJECT_WWW                        "https://setmy.info")

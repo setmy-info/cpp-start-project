@@ -1,0 +1,1 @@
+ADD_CUSTOM_TARGET(includes  cp ${MAIN_SOURCES_PATH}/cpp/include/sdk/Sdk.h ${INCLUDE_OUTPUT_PATH}/Sdk.h)

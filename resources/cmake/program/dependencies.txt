@@ -1,0 +1,8 @@
+ADD_DEPENDENCIES(build includes)
+
+ADD_DEPENDENCIES(includes makeDirectories)
+
+ADD_DEPENDENCIES(example.bin    exampleshared)
+ADD_DEPENDENCIES(example.bin    examplestatic)
+#ADD_DEPENDENCIES(test.bin      exampleshared)
+#ADD_DEPENDENCIES(test.bin      examplestatic)

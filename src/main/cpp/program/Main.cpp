@@ -1,4 +1,5 @@
-#include "main.h"
+#include "program/Main.hpp"
+
 #include <cstdlib>
 #include <iostream>
 

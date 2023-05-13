@@ -1,9 +1,9 @@
 # PLACEHOLDER-BEGIN #
 
-ADD_CUSTOM_TARGET(build             ALL)
-ADD_CUSTOM_TARGET(clear             )
+ADD_CUSTOM_TARGET(build ALL)
+ADD_CUSTOM_TARGET(clear )
 
-ADD_CUSTOM_TARGET(dirs
+ADD_CUSTOM_TARGET(makeDirectories
     mkdir -p ${BUILD_PATH} &&
     mkdir -p ${MAN_OUTPUT_PATH}/man1 &&
     mkdir -p ${MAN_OUTPUT_PATH}/man2 &&
@@ -20,12 +20,11 @@ ADD_CUSTOM_TARGET(dirs
     mkdir -p ${ETC_SYSTEM_OUTPUT_PATH}
 )
 
-INCLUDE(./resources/cmake/cpp/program.txt)
-
-ADD_CUSTOM_TARGET(gzipman    cp ${RESOURCES_PATH}/man/*.1 ${MAN_OUTPUT_PATH}/man1 && gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
-ADD_CUSTOM_TARGET(includes   cp ${MAIN_SOURCES_PATH}/cpp/include/Development.h ${INCLUDE_OUTPUT_PATH}/Development.h)
+ADD_CUSTOM_TARGET(manBuild   cp ${RESOURCES_PATH}/man/*.1 ${MAN_OUTPUT_PATH}/man1 && gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
 ADD_CUSTOM_TARGET(clearBuild rm -rf ./build)
 ADD_CUSTOM_TARGET(clearPkg   rm -rf ./${PROJECT_NAME}*.tar.gz ./${PROJECT_NAME}*.rpm ./${PROJECT_NAME}*.sh ./${PROJECT_NAME}*.deb ./${PROJECT_NAME}*.tar.Z ./${PROJECT_NAME}*.7z ./${PROJECT_NAME}*.tar.bz2 ./${PROJECT_NAME}*.tar.xz ./${PROJECT_NAME}*.zip)
 ADD_CUSTOM_TARGET(clearCmake rm -rf ./*.cmake ./_CPack_Packages install_manifest.txt CMakeCache.txt resources/CMakeFiles resources/cmake/CMakeFiles resources/cmake/*.cmake resources/cmake/CMakeCache.txt)
+
+INCLUDE(./resources/cmake/program/targets.txt)
 
 # PLACEHOLDER-END #

@@ -15,4 +15,4 @@ _deps
 CPackConfig.cmake
 CPackSourceConfig.cmake
 build/
-
+.idea

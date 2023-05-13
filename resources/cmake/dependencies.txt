@@ -1,13 +1,9 @@
 # PLACEHOLDER-BEGIN #
 
-ADD_DEPENDENCIES(build includes gzipman)
-ADD_DEPENDENCIES(gzipman  dirs)
-ADD_DEPENDENCIES(includes dirs)
+ADD_DEPENDENCIES(build manBuild)
+ADD_DEPENDENCIES(manBuild  makeDirectories)
 ADD_DEPENDENCIES(clear clearCmake clearBuild clearPkg)
 
-ADD_DEPENDENCIES(example.bin    exampleshared)
-ADD_DEPENDENCIES(example.bin    examplestatic)
-ADD_DEPENDENCIES(test.bin       exampleshared)
-ADD_DEPENDENCIES(test.bin       examplestatic)
+INCLUDE(./resources/cmake/program/dependencies.txt)
 
 # PLACEHOLDER-END #

@@ -68,6 +68,8 @@ SET (TEST_INCLUDES_PATH             ${TEST_SOURCES_PATH}/include)
 SET (INSTALL_SCRIPTS_PATH           ${RESOURCES_PATH}/install)
 SET (DEFAULT_PACKAGES               "TGZ;STGZ;7Z;TBZ2;TXZ;TZ;ZIP")
 
+INCLUDE(./resources/cmake/program/variables.txt)
+
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
 # PLACEHOLDER-END #
