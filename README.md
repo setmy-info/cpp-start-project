@@ -7,13 +7,13 @@
 make
 make package
 sudo rpm -e cpp-start-project
-sudo rpm -i cpp-start-project-0.54.0-SNAPSHOT.noarch.rpm
+sudo rpm -i cpp-start-project-0.54.0-SN.rpm
 ```
 
 All in single line:
 
 ```sh
-./configure release && make clear clean && make all test package && sudo rpm -e cpp-start-project && sudo rpm -i cpp-start-project-0.54.0.noarch.rpm
+./configure release && make clear clean && make all test package && sudo rpm -e cpp-start-project && sudo rpm -i cpp-start-project-0.54.0.x86_64.rpm
 ```
 
 ### Build options
