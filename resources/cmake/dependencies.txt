@@ -1,9 +1,0 @@
-# PLACEHOLDER-BEGIN #
-
-ADD_DEPENDENCIES(build manBuild)
-ADD_DEPENDENCIES(manBuild  makeDirectories)
-ADD_DEPENDENCIES(clear clearCmake clearBuild clearPkg)
-
-INCLUDE(./resources/cmake/program/dependencies.txt)
-
-# PLACEHOLDER-END #

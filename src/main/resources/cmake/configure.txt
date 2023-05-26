@@ -1,0 +1,9 @@
+# PLACEHOLDER-BEGIN #
+MESSAGE("-- configure.txt")
+
+#CONFIGURE_FILE("${MAIN_SH_SOURCES_PATH}/in/some.in"       "${BINARY_OUTPUT_PATH}/some")
+#CONFIGURE_FILE("${MAIN_SH_SOURCES_PATH}/in/another.sh.in" "${LIBRARY_OUTPUT_PATH}/another.sh")
+
+INCLUDE_CMAKE_FILE(${MAIN_CMAKE_PATH}/cpp/configure.txt)
+
+# PLACEHOLDER-END #
