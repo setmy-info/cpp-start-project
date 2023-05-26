@@ -9,7 +9,7 @@ install_manifest.txt
 *.7z
 *.*.rpm
 *.noarch.sh
-*.*.sh
+./*.*.sh
 *.tar.Z
 *.tar.bz2
 *.tar.gz
