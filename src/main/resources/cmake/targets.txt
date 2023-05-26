@@ -25,8 +25,8 @@ ADD_CUSTOM_TARGET(makeDirectories
 )
 
 ADD_CUSTOM_TARGET(buildMan            cp ${MAIN_MAN_SOURCES_PATH}/*.1 ${MAN_OUTPUT_PATH}/man1 && gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
-ADD_CUSTOM_TARGET(buildEtc            cp -R ${MAIN_SH_SOURCES_PATH}/etc/profile.d/* ${ETC_OUTPUT_PATH}/profile.d)
-ADD_CUSTOM_TARGET(buildLibShells      cp -R ${MAIN_SH_SOURCES_PATH}/lib/*.sh ${LIBRARY_OUTPUT_PATH})
+ADD_CUSTOM_TARGET(buildEtc            echo cp -R ${MAIN_SH_SOURCES_PATH}/etc/profile.d/* ${ETC_OUTPUT_PATH}/profile.d)
+ADD_CUSTOM_TARGET(buildLibShells      echo cp -R ${MAIN_SH_SOURCES_PATH}/lib/*.sh ${LIBRARY_OUTPUT_PATH})
 ADD_CUSTOM_TARGET(buildShellScripts   echo cp ${MAIN_SH_SOURCES_PATH}/bin/* ${BINARY_OUTPUT_PATH})
 ADD_CUSTOM_TARGET(buildGroovyScripts  echo cp ${MAIN_GROOVY_SOURCES_PATH}/lib/*.groovy ${LIBRARY_OUTPUT_PATH})
 ADD_CUSTOM_TARGET(buildPythonScripts  echo cp ${MAIN_PYTHON_SOURCES_PATH}/lib/*.py ${LIBRARY_OUTPUT_PATH})
