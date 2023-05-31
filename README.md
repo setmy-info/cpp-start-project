@@ -20,7 +20,7 @@ All in single line:
 
 **./configure** options
 
-**ci** - synonyme for release
+**ci** - synonym for release
 
 **release** -
     verification (unit tests, integration tests incl. valgrind tests), release (no debug info) binaries, stripped, without 
