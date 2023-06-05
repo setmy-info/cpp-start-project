@@ -1,5 +1,11 @@
 # cpp-start-project
 
+## Preparations
+
+```sh
+sudo dnf -y install boost-test boost-devel
+```
+
 ## Build
 
 ```sh
