@@ -1,22 +1,21 @@
 #ifndef SET_MY_INFO_APPLICATION_H
 #define	SET_MY_INFO_APPLICATION_H
 
+#include "EnvironmentVariables.h"
+#include "CommandLineParameters.h"
+
 #include <string>
 #include <vector>
 
 namespace SetMyInfo {
 
     class Application {
+        EnvironmentVariables environmentVariables;
+        CommandLineParameters commandLineParameters;
     public:
-
         std::string commandName;
-        std::vector<std::string> parameters;
 
-        Application();
-        Application(const Application& orig);
-        virtual ~Application();
-
-        int Args(int argc, char *argv[], char *env[]);
+        int Args(int argc, char *argv[]);
         virtual int Main();
 
     private:

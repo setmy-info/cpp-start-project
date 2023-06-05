@@ -2,7 +2,7 @@
 
 using namespace SetMyInfo;
 
-int main(int argc, char *argv[], char *env[]) {
+int main(int argc, char *argv[]) {
     Application app;
-    return app.Args(argc, argv, env);
+    return app.Args(argc, argv);
 }

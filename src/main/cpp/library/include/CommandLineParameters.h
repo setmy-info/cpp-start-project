@@ -8,9 +8,7 @@ namespace SetMyInfo {
 
     class CommandLineParameters {
     public:
-        CommandLineParameters();
-        virtual ~CommandLineParameters();
-        void Init();
+        std::vector<std::string> parameters;
     };
 
 }
