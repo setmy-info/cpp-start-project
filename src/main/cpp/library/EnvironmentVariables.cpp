@@ -22,6 +22,9 @@ namespace SetMyInfo {
     }
 
     optional<string> EnvironmentVariables::GetEnv(const char *env_name) {
+        if(env_name == 0) {
+            return nullopt;
+        }
         const char* value = getenv(env_name);
         if (value != 0) {
             return string(value);
