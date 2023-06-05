@@ -1,5 +1,5 @@
-#ifndef SET_MY_INFO_DATA_TYPES_TEST_H_
-#define	SET_MY_INFO_DATA_TYPES_TEST_H_
+#ifndef SET_MY_INFO_DATA_TYPES_TEST_H
+#define	SET_MY_INFO_DATA_TYPES_TEST_H
 
 #include "CppUnitTest.h"
 #include "DataTypes.h"
@@ -116,4 +116,4 @@ BOOST_AUTO_TEST_SUITE(data_types_test)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-#endif // SET_MY_INFO_DATA_TYPES_TEST_H_
+#endif // SET_MY_INFO_DATA_TYPES_TEST_H

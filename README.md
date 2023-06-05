@@ -37,3 +37,16 @@ All in single line:
 **noSnapshot** - without -SNAPSHOT
 
 **realPaths** - inside scripts real path used
+
+## Adding class
+
+Affected files are like these:
+
+```
+new file:   src/main/cpp/library/CommandLineParameters.cpp
+new file:   src/main/cpp/library/include/CommandLineParameters.h
+new file:   src/test/cpp/library/include/CommandLineParametersTest.h
+modified:   src/main/resources/cmake/cpp/library/sources.txt
+modified:   src/test/cpp/library/include/Tests.h
+modified:   src/test/resources/cmake/cpp/library/tests.txt
+```

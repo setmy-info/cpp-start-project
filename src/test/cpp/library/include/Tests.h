@@ -5,5 +5,7 @@
 
 #include "Tests1.h"
 #include "DataTypesTest.h"
+#include "EnvironmentVariablesTest.h"
+#include "CommandLineParametersTest.h"
 
 #endif // SET_MY_INFO_TESTS_H_
