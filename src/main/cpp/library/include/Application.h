@@ -1,5 +1,5 @@
 #ifndef SET_MY_INFO_APPLICATION_H
-#define	SET_MY_INFO_APPLICATION_H
+#define    SET_MY_INFO_APPLICATION_H
 
 #include "EnvironmentVariables.h"
 #include "CommandLineParameters.h"
@@ -13,13 +13,9 @@ namespace SetMyInfo {
         EnvironmentVariables environmentVariables;
         CommandLineParameters commandLineParameters;
     public:
-        std::string commandName;
+        void Args(const int argc, const char *argv[]);
 
-        int Args(int argc, char *argv[]);
         virtual int Main();
-
-    private:
-
     };
 }
 #endif // SET_MY_INFO_APPLICATION_H

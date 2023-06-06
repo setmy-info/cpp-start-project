@@ -2,16 +2,12 @@
 
 namespace SetMyInfo {
 
-    int Application::Args(int argc, char *argv[]) {
-        this->commandName = argv[0];
-        for (int i = 1; i < argc; i++) {
-            std::string tmp = argv[i];
-            this->commandLineParameters.parameters.push_back(tmp);
-        }
-        return this->Main();
+    void Application::Args(const int argc, const char *argv[]) {
+        this->commandLineParameters.Args(argc, argv);
     }
 
     int Application::Main() {
+        // TODO
         return 0;
     }
 }
