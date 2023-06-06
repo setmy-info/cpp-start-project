@@ -16,7 +16,19 @@ BOOST_AUTO_TEST_SUITE(commandline_parameters_test)
             const char *arguments[] = {"programName", "abc", "def=ghi", "jkl=mno=prs"};
             BOOST_CHECK_EQUAL(ARRAY_SIZEOF(arguments), 4);
             commandline_parameters.Args(ARRAY_SIZEOF(arguments), arguments);
-            BOOST_CHECK_EQUAL(1, 1);
+            std::string property_name = "abc";
+            BOOST_CHECK(commandline_parameters.parameters_map[property_name].empty());
+            property_name = "def";
+            std::string value = "ghi";
+            BOOST_CHECK(!commandline_parameters.parameters_map[property_name].empty());
+            BOOST_CHECK_EQUAL(commandline_parameters.parameters_map[property_name].at(0), value);
+
+            property_name = "jkl";
+            BOOST_CHECK(!commandline_parameters.parameters_map[property_name].empty());
+            value = "mno";
+            BOOST_CHECK_EQUAL(commandline_parameters.parameters_map[property_name].at(0), value);
+            value = "prs";
+            BOOST_CHECK_EQUAL(commandline_parameters.parameters_map[property_name].at(1), value);
         }
 
     BOOST_AUTO_TEST_SUITE_END()
