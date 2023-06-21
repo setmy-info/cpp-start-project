@@ -7,10 +7,13 @@
 
 namespace SetMyInfo {
 
+    using CommandLineParametersMap = std::unordered_map<std::string, std::vector<std::string>>;
+
     class CommandLineParameters {
     public:
         std::string commandName;
         std::vector<std::string> parameters;
+        CommandLineParametersMap parameters_map;
 
         void Args(const int argc, const char *argv[]);
     };
