@@ -19,7 +19,7 @@ sudo rpm -i cpp-start-project-0.54.0-SN.rpm
 All in single line:
 
 ```sh
-./configure release && make clear clean && make all test package && sudo rpm -e cpp-start-project && sudo rpm -i cpp-start-project-0.54.0.x86_64.rpm
+./configure release && make clean && make all test package && sudo rpm -e cpp-start-project && sudo rpm -i cpp-start-project-1.0.0.x86_64.rpm
 ```
 
 ### Build options

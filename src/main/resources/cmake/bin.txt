@@ -1,12 +1,8 @@
 # PLACEHOLDER-BEGIN #
+MESSAGE("-- bin.txt")
 
-#INSTALL(PROGRAMS  "${BINARY_OUTPUT_PATH}/hgrep"                      DESTINATION bin)
-
+INCLUDE_CMAKE_FILE(${MAIN_CMAKE_PATH}/sh/bin.txt)
 INCLUDE_CMAKE_FILE(${MAIN_CMAKE_PATH}/cpp/bin.txt)
-
-IF(DISTRIBUTION STREQUAL "FreeBSD")
-#    INSTALL(PROGRAMS  "${BINARY_OUTPUT_PATH}/smi-jail"               DESTINATION bin)
-ENDIF()
 
 IF (WIN32)
     # TODO : Win32/Win64 things

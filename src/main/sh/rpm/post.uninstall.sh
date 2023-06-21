@@ -4,5 +4,7 @@
 echo "### Post-Uninstall"
 SMI_PROVIDER=setmy.info
 #rm -f /etc/profile.d/some.sh
+#rm -f /opt/${SMI_PROVIDER}/bin/smi-test
+#rm -f /etc/systemd/system/example.service
 
 exit ${?}
