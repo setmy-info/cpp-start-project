@@ -2,8 +2,10 @@
 
 ## Preparations
 
+All libraries are not decided for project jet
+
 ```sh
-sudo dnf -y install boost-test boost-devel
+sudo dnf -y install boost-test boost-devel boost-program-options yaml-cpp-devel json-c-devel libyaml-devel
 ```
 
 ## Build
@@ -29,8 +31,8 @@ All in single line:
 **ci** - synonym for release
 
 **release** -
-    verification (unit tests, integration tests incl. valgrind tests), release (no debug info) binaries, stripped, without 
-    -SNAPSHOT, real paths in side scripts.
+verification (unit tests, integration tests incl. valgrind tests), release (no debug info) binaries, stripped, without
+-SNAPSHOT, real paths in side scripts.
 
 **skipITs** - like maven skipITS, that skips integration tests incl. valgrind tests.
 
