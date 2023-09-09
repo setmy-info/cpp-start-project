@@ -1,6 +1,0 @@
-# PLACEHOLDER-BEGIN #
-MESSAGE("-- sh dependencies.txt")
-
-INCLUDE_CMAKE_FILE(${MAIN_CMAKE_PATH}/sh/base/dependencies.txt)
-
-# PLACEHOLDER-END #

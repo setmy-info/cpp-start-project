@@ -1,0 +1,6 @@
+# PLACEHOLDER-BEGIN #
+MESSAGE("-- javah sources.cmake")
+
+SET (JAVAH_MODULE_PATH ${MAIN_CPP_SOURCES_PATH}/javah)
+
+# PLACEHOLDER-END #
