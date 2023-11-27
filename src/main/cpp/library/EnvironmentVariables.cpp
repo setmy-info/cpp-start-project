@@ -26,9 +26,9 @@ namespace SetMyInfo {
             return nullopt;
         }
         const char* value = getenv(env_name);
-        if (value != 0) {
-            return string(value);
+        if (value == 0) {
+            return nullopt;
         }
-        return nullopt;
+        return string(value);
     }
 }

@@ -27,6 +27,20 @@ BOOST_AUTO_TEST_SUITE(environment_variables_test)
             BOOST_CHECK(path.value().find(bin) != std::string::npos);
         }
 
+        BOOST_AUTO_TEST_CASE(non_existing_variable) {
+            EnvironmentVariables& environmentVariables = EnvironmentVariables::getInstance();
+            const std::string path_key = "NON_EXISTING_ENV_VARIABLE";
+            const std::optional<std::string> path = environmentVariables.GetEnv(path_key);
+            BOOST_CHECK(!path.has_value());
+        }
+
+        BOOST_AUTO_TEST_CASE(null_argument_accepting) {
+            EnvironmentVariables& environmentVariables = EnvironmentVariables::getInstance();
+            const char *path_key = nullptr;
+            const std::optional<std::string> path = environmentVariables.GetEnv(path_key);
+            BOOST_CHECK(!path.has_value());
+        }
+
     BOOST_AUTO_TEST_SUITE_END()
 
     BOOST_AUTO_TEST_SUITE(it)
