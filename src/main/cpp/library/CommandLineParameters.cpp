@@ -14,7 +14,7 @@ namespace SetMyInfo {
             this->parameters.push_back(tmp);
         }
 
-        for (const std::string parameter: this->parameters) {
+        for (const auto& parameter: this->parameters) {
             std::istringstream iss(parameter);
             std::string option;
             std::getline(iss, option, '=');
