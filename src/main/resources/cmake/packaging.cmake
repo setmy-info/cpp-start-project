@@ -1,4 +1,5 @@
 # PLACEHOLDER-BEGIN #
+MESSAGE("-- packaging.cmake")
 
 # Binary packages or non-binary (scripts, Java, Python) packages.
 SET (MACHINE_BINARY_PROJECT TRUE)

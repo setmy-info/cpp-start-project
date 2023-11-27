@@ -14,17 +14,22 @@ ADD_CUSTOM_TARGET(makeDirectories
     mkdir -p ${MAN_OUTPUT_PATH}/man9 &&
     mkdir -p ${INFO_OUTPUT_PATH} &&
     mkdir -p ${LIBRARY_OUTPUT_PATH}/profiles &&
+    mkdir -p ${LIBRARY_OUTPUT_PATH}/packages &&
     mkdir -p ${ETC_PROFILED_OUTPUT_PATH} &&
     mkdir -p ${INCLUDE_OUTPUT_PATH} &&
     mkdir -p ${ETC_SYSTEM_OUTPUT_PATH} &&
-    mkdir -p ${ETC_SYSTEM_OUTPUT_PATH}/systemd/system
+    mkdir -p ${ETC_YUM_REPOS_PATH} &&
+    mkdir -p ${ETC_SYSTEM_OUTPUT_PATH}/systemd/system &&
+    mkdir -p ${SMI_VAR_PATH}
 )
 
-ADD_CUSTOM_TARGET(buildMan            cp ${MAIN_MAN_SOURCES_PATH}/*.1 ${MAN_OUTPUT_PATH}/man1 && gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
-ADD_CUSTOM_TARGET(buildEtc            echo cp -R ${MAIN_SH_SOURCES_PATH}/etc/profile.d/* ${ETC_OUTPUT_PATH}/profile.d)
-ADD_CUSTOM_TARGET(buildLibShells      echo cp ${MAIN_SH_SOURCES_PATH}/lib/*.sh ${LIBRARY_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildShellScripts   echo cp ${MAIN_SH_SOURCES_PATH}/bin/* ${BINARY_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildServiceScripts echo cp ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.service ${ETC_SYSTEM_OUTPUT_PATH} && echo cp ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/environment.conf ${ETC_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildProfiles       echo cp -R ${MAIN_SH_SOURCES_PATH}/lib/profiles/* ${LIBRARY_OUTPUT_PATH}/profiles)
+ADD_CUSTOM_TARGET(buildMan             cp ${MAIN_MAN_SOURCES_PATH}/*.1 ${MAN_OUTPUT_PATH}/man1 && gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
+ADD_CUSTOM_TARGET(buildEtc             echo cp -R ${MAIN_SH_SOURCES_PATH}/etc/profile.d/* ${ETC_OUTPUT_PATH}/profile.d)
+ADD_CUSTOM_TARGET(buildLibShells       echo cp ${MAIN_SH_SOURCES_PATH}/lib/*.sh ${LIBRARY_OUTPUT_PATH} && echo cp ${MAIN_SH_SOURCES_PATH}/lib/*.txt ${LIBRARY_OUTPUT_PATH})
+ADD_CUSTOM_TARGET(buildShellScripts    echo cp ${MAIN_SH_SOURCES_PATH}/bin/* ${BINARY_OUTPUT_PATH})
+ADD_CUSTOM_TARGET(buildServiceScripts  echo cp ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.service ${ETC_SYSTEM_OUTPUT_PATH} && echo cp ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/environment.conf ${ETC_OUTPUT_PATH})
+ADD_CUSTOM_TARGET(buildYumReposScripts echo cp ${MAIN_SH_SOURCES_PATH}/etc/yum.repos.d/*.repo ${ETC_YUM_REPOS_PATH})
+ADD_CUSTOM_TARGET(buildProfiles        echo cp -R ${MAIN_SH_SOURCES_PATH}/lib/profiles/* ${LIBRARY_OUTPUT_PATH}/profiles)
+ADD_CUSTOM_TARGET(buildPackages        echo cp -R ${MAIN_SH_SOURCES_PATH}/lib/packages/* ${LIBRARY_OUTPUT_PATH}/packages)
 
 # PLACEHOLDER-END #
