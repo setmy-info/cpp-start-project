@@ -1,5 +1,5 @@
 #ifndef SET_MY_INFO_COMMANDLINE_PARAMETERS_TEST_H
-#define    SET_MY_INFO_COMMANDLINE_PARAMETERS_TEST_H
+#define SET_MY_INFO_COMMANDLINE_PARAMETERS_TEST_H
 
 #include "CppUnitTest.h"
 #include "CommandLineParameters.h"

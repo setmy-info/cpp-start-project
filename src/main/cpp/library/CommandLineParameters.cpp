@@ -1,8 +1,6 @@
 #include "CommandLineParameters.h"
 
 #include <string>
-#include <vector>
-#include <unordered_map>
 #include <sstream>
 
 namespace SetMyInfo {
