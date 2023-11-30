@@ -8,5 +8,6 @@
 #include "EnvironmentVariablesTest.h"
 #include "CommandLineParametersTest.h"
 #include "CollectionTest.h"
+#include "StringTest.h"
 
 #endif // SET_MY_INFO_TESTS_H_

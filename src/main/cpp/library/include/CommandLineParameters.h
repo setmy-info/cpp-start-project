@@ -5,13 +5,13 @@
 #include <vector>
 #include <unordered_map>
 
-namespace SetMyInfo {
+namespace set_my_info {
 
     using CommandLineParametersMap = std::unordered_map<std::string, std::vector<std::string>>;
 
     class CommandLineParameters {
     public:
-        std::string commandName;
+        std::string command_name;
         std::vector<std::string> parameters;
         CommandLineParametersMap parameters_map;
 

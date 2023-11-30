@@ -5,13 +5,26 @@
 #include <string>
 #include <vector>
 
-namespace SetMyInfo {
+namespace set_my_info {
 
     class EnvironmentVariables {
     public:
-        static EnvironmentVariables& getInstance();
+        static EnvironmentVariables &GetInstance();
+
         std::optional<std::string> GetEnv(const std::string &env_name);
+
         std::optional<std::string> GetEnv(const char *env_name);
+
+    private:
+        EnvironmentVariables() = default;
+
+        ~EnvironmentVariables() = default;
+
+        // Restricted copy and setting in singletone pattern
+        EnvironmentVariables(const EnvironmentVariables &) = delete;
+
+        // Restricted setting in singletone pattern
+        EnvironmentVariables &operator=(const EnvironmentVariables &) = delete;
     };
 
 }

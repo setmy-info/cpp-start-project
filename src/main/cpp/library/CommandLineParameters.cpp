@@ -3,10 +3,10 @@
 #include <string>
 #include <sstream>
 
-namespace SetMyInfo {
+namespace set_my_info {
 
     void CommandLineParameters::Args(const int argc, const char *argv[]) {
-        this->commandName = argv[0];
+        this->command_name = argv[0];
         for (int i = 1; i < argc; i++) {
             std::string tmp = argv[i];
             this->parameters.push_back(tmp);

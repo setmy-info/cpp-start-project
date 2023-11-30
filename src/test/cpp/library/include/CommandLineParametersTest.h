@@ -5,7 +5,7 @@
 #include "CommandLineParameters.h"
 #include "Macros.h"
 
-using SetMyInfo::CommandLineParameters;
+using set_my_info::CommandLineParameters;
 
 BOOST_AUTO_TEST_SUITE(commandline_parameters_test)
 

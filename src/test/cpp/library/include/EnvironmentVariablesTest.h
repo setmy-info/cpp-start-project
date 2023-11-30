@@ -4,14 +4,14 @@
 #include "CppUnitTest.h"
 #include "EnvironmentVariables.h"
 
-using SetMyInfo::EnvironmentVariables;
+using set_my_info::EnvironmentVariables;
 
 BOOST_AUTO_TEST_SUITE(environment_variables_test)
 
     BOOST_AUTO_TEST_SUITE(ut)
 
         BOOST_AUTO_TEST_CASE(can_find_value) {
-            EnvironmentVariables& environmentVariables = EnvironmentVariables::getInstance();
+            EnvironmentVariables& environmentVariables = EnvironmentVariables::GetInstance();
             const std::optional<std::string> path = environmentVariables.GetEnv("PATH");
             const std::string bin = "/bin";
             BOOST_CHECK(path.has_value());
@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(environment_variables_test)
         }
 
         BOOST_AUTO_TEST_CASE(can_find_value_string) {
-            EnvironmentVariables& environmentVariables = EnvironmentVariables::getInstance();
+            EnvironmentVariables& environmentVariables = EnvironmentVariables::GetInstance();
             const std::string path_key = "PATH";
             const std::optional<std::string> path = environmentVariables.GetEnv(path_key);
             const std::string bin = "/bin";
@@ -28,14 +28,14 @@ BOOST_AUTO_TEST_SUITE(environment_variables_test)
         }
 
         BOOST_AUTO_TEST_CASE(non_existing_variable) {
-            EnvironmentVariables& environmentVariables = EnvironmentVariables::getInstance();
+            EnvironmentVariables& environmentVariables = EnvironmentVariables::GetInstance();
             const std::string path_key = "NON_EXISTING_ENV_VARIABLE";
             const std::optional<std::string> path = environmentVariables.GetEnv(path_key);
             BOOST_CHECK(!path.has_value());
         }
 
         BOOST_AUTO_TEST_CASE(null_argument_accepting) {
-            EnvironmentVariables& environmentVariables = EnvironmentVariables::getInstance();
+            EnvironmentVariables& environmentVariables = EnvironmentVariables::GetInstance();
             const char *path_key = nullptr;
             const std::optional<std::string> path = environmentVariables.GetEnv(path_key);
             BOOST_CHECK(!path.has_value());

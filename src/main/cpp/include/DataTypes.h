@@ -1,7 +1,7 @@
 #ifndef SET_MY_INFO_DATA_TYPES_H
 #define SET_MY_INFO_DATA_TYPES_H
 
-namespace SetMyInfo {
+namespace set_my_info {
 
     using SChar = signed char;
     using UChar = unsigned char;

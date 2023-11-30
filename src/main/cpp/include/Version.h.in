@@ -1,7 +1,7 @@
 #ifndef SET_MY_INFO_VERSION_H
 #define	SET_MY_INFO_VERSION_H
 
-namespace SetMyInfo {
+namespace set_my_info {
 
 // the configured options and settings for module
 #define PROJECT_MODULE_VERSION_MAJOR @PROJECT_VERSION_MAJOR@

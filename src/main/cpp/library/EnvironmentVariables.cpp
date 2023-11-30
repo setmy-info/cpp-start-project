@@ -10,9 +10,9 @@ using std::optional;
 using std::nullopt;
 using std::getenv;
 
-namespace SetMyInfo {
+namespace set_my_info {
 
-    EnvironmentVariables& EnvironmentVariables::getInstance() {
+    EnvironmentVariables& EnvironmentVariables::GetInstance() {
         static EnvironmentVariables instance;
         return instance;
     }

@@ -1,7 +1,7 @@
 #ifndef SET_MY_INFO_MACROS_H
 #define SET_MY_INFO_MACROS_H
 
-namespace SetMyInfo {
+namespace set_my_info {
 
 /**
  * const char *arguments[] = {"programName", "abc", "def=ghi", "jkl=mno=prs", 0};

@@ -2,7 +2,7 @@
 MESSAGE("-- library sources.cmake")
 
 SET (LIBRARY_MODULE_PATH ${MAIN_CPP_SOURCES_PATH}/library)
-SET (LIBRARY_MODULE_SOURCES ${LIBRARY_MODULE_PATH}/Application.cpp ${LIBRARY_MODULE_PATH}/CommandLineParameters.cpp ${LIBRARY_MODULE_PATH}/EnvironmentVariables.cpp ${LIBRARY_MODULE_PATH}/Example.cpp)
+SET (LIBRARY_MODULE_SOURCES ${LIBRARY_MODULE_PATH}/Application.cpp ${LIBRARY_MODULE_PATH}/CommandLineParameters.cpp ${LIBRARY_MODULE_PATH}/String.cpp ${LIBRARY_MODULE_PATH}/EnvironmentVariables.cpp ${LIBRARY_MODULE_PATH}/Example.cpp)
 INCLUDE_DIRECTORIES("${LIBRARY_MODULE_PATH}/include")
 
 # PLACEHOLDER-END #

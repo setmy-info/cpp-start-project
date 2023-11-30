@@ -1,17 +1,15 @@
 #ifndef SET_MY_INFO_APPLICATION_H
-#define    SET_MY_INFO_APPLICATION_H
+#define SET_MY_INFO_APPLICATION_H
 
-#include "EnvironmentVariables.h"
 #include "CommandLineParameters.h"
 
 #include <string>
 #include <vector>
 
-namespace SetMyInfo {
+namespace set_my_info {
 
     class Application {
-        EnvironmentVariables environmentVariables;
-        CommandLineParameters commandLineParameters;
+        CommandLineParameters command_line_parameters;
     public:
         void Args(const int argc, const char *argv[]);
 
