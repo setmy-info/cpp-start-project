@@ -1,5 +1,5 @@
 # PLACEHOLDER-BEGIN #
-MESSAGE("-- man etc.cmake")
+MESSAGE("-- cpp man.cmake")
 
 INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/javah/man.cmake)
 INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/library/man.cmake)
