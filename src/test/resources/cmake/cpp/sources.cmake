@@ -1,8 +1,6 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- test cpp sources.cmake")
 
-enable_testing()
-
 INCLUDE(${TEST_CPP_CMAKE_PATH}/library/sources.cmake)
 
 SET (GLOBAL_MODULE_TEST_PATH ${TEST_CPP_SOURCES_PATH})
