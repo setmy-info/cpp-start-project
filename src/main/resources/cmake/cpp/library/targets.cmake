@@ -1,6 +1,8 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- library targets.cmake")
 
+ADD_CUSTOM_TARGET(includes cp ${MAIN_INCLUDES_PATH}/Development.h ${INCLUDE_OUTPUT_PATH}/Development.h)
+
 ADD_LIBRARY(examplestatic STATIC ${LIBRARY_MODULE_SOURCES})
 ADD_LIBRARY(exampleshared SHARED ${LIBRARY_MODULE_SOURCES})
 

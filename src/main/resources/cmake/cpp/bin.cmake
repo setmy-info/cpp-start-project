@@ -1,10 +1,8 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- cpp bin.cmake")
 
-INSTALL(PROGRAMS  "${BINARY_OUTPUT_PATH}/debug"                      DESTINATION bin)
-INSTALL(PROGRAMS  "${BINARY_OUTPUT_PATH}/example"                    DESTINATION bin)
-
 INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/javah/bin.cmake)
+INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/library/bin.cmake)
 INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/main/bin.cmake)
 
 # PLACEHOLDER-END #

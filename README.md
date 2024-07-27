@@ -5,7 +5,7 @@
 All libraries are not decided for project jet
 
 ```sh
-sudo dnf -y install boost-test boost-devel boost-program-options yaml-cpp-devel json-c-devel libyaml-devel
+sudo dnf -y install boost-test boost-devel boost-program-options yaml-cpp-devel json-c-devel libyaml-devel valgrind
 ```
 
 ## Build
