@@ -6,6 +6,7 @@ All libraries are not decided for project jet
 
 ```sh
 sudo dnf -y install boost-test boost-devel boost-program-options yaml-cpp-devel json-c-devel libyaml-devel valgrind
+sudo dnf -y install libjpeg-devel libtiff libtiff-tools libtiff-devel libtiff gtk4 gtk4-devel ddd eog
 ```
 
 ## Build
@@ -53,3 +54,12 @@ modified:   src/main/resources/cmake/cpp/library/sources.txt
 modified:   src/test/cpp/library/include/Tests.h
 modified:   src/test/resources/cmake/cpp/library/tests.txt
 ```
+
+## TODO
+
+Mostly code from HASS:
+
+* **has-lib-watchdog** (Fri Apr 12 22:26:34 2013 +0300)
+* **cloudy-storage** (Sun Nov 18 18:16:53 2012 +0200)
+* **has-id-db** (Mon Oct 22 23:27:01 2012 +0300)
+* **has-sys-ai-cpp** (has-sys-developer Sun Apr 30 09:26:42 2017 +0300)
