@@ -72,17 +72,22 @@ namespace set_my_info {
         return *this;
     }
 
-    DataCell& DataCell::operator=(const Date &value) {
+    DataCell &DataCell::operator=(const Date &value) {
         this->setData(value);
         return *this;
     }
 
-    DataCell& DataCell::operator=(const Time &value) {
+    DataCell &DataCell::operator=(const Time &value) {
         this->setData(value);
         return *this;
     }
 
-    DataCell& DataCell::operator=(const DateTime &value) {
+    DataCell &DataCell::operator=(const DateTime &value) {
+        this->setData(value);
+        return *this;
+    }
+
+    DataCell &DataCell::operator=(const char *const value) {
         this->setData(value);
         return *this;
     }
@@ -177,6 +182,12 @@ namespace set_my_info {
         }
     }
 
+    void DataCell::setData(const char *const value) {
+        if (this->setString(value)) {
+            this->data_type_ = STRING;
+        }
+    }
+
     template<typename T>
     Boolean DataCell::set(const T value) {
         try {
@@ -200,6 +211,21 @@ namespace set_my_info {
             const size_t size = sizeof(value);
             this->allocate(size);
             std::memcpy(this->data_, &value, size);
+            return true;
+        } catch (std::bad_alloc &badAllocException) {
+            return false;
+        }
+    }
+
+    Boolean DataCell::setString(const char *const value) {
+        try {
+            if (this->data_ != nullptr) {
+                this->free();
+            }
+            const size_t length = std::strlen(value);
+            this->allocate(length + 1);
+            std::strncpy((char *) this->data_, value, length);
+            this->data_[length] = 0;
             return true;
         } catch (std::bad_alloc &badAllocException) {
             return false;

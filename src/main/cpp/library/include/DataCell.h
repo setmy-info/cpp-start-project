@@ -22,6 +22,8 @@ namespace set_my_info {
         template<typename T>
         Boolean setStruct(const T &value);
 
+        Boolean setString(const char *const value);
+
     public:
         DataCell();
 
@@ -55,6 +57,8 @@ namespace set_my_info {
 
         DataCell &operator=(const DateTime &value);
 
+        DataCell &operator=(const char *const value);
+
         void setData(const Boolean value);
 
         void setData(const UInt8 value);
@@ -84,6 +88,8 @@ namespace set_my_info {
         void setData(const Time &value);
 
         void setData(const DateTime &value);
+
+        void setData(const char *const value);
 
         size_t GetDataLength();
 
