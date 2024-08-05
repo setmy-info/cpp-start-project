@@ -9,7 +9,7 @@
 namespace set_my_info {
 
     class Application {
-        CommandLineParameters command_line_parameters;
+        CommandLineParameters command_line_parameters_;
     public:
         void Args(const int argc, const char *argv[]);
 

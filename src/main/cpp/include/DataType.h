@@ -62,7 +62,7 @@ namespace set_my_info {
         Time time;
     };
 
-    enum DataTypes {
+    enum DataType {
         UINT8 = 1,
         SINT8,
         UINT16,
