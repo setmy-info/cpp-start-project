@@ -7,6 +7,7 @@ All libraries are not decided for project jet
 ```sh
 sudo dnf -y install boost-test boost-devel boost-program-options yaml-cpp-devel json-c-devel libyaml-devel valgrind
 sudo dnf -y install libjpeg-devel libtiff libtiff-tools libtiff-devel libtiff gtk4 gtk4-devel ddd eog
+sudo dnf -y install mosquitto-devel
 ```
 
 ## Build
