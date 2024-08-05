@@ -3,9 +3,15 @@
 
 namespace set_my_info {
 
+    using Boolean = bool;
+
     using SChar = signed char;
     using UChar = unsigned char;
     using Char = SChar;
+
+    using SByte = signed char;
+    using UByte = unsigned char;
+    using Byte = SByte;
 
     using UInt8 = unsigned char;
     using SInt8 = signed char;
@@ -63,7 +69,9 @@ namespace set_my_info {
     };
 
     enum DataType {
-        UINT8 = 1,
+        NO_TYPE = 0,
+        BOOLEAN,
+        UINT8,
         SINT8,
         UINT16,
         SINT16,

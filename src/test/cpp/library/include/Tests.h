@@ -9,5 +9,6 @@
 #include "CommandLineParametersTest.h"
 #include "CollectionTest.h"
 #include "TextTest.h"
+#include "DataCellTest.h"
 
 #endif // SET_MY_INFO_TESTS_H_
