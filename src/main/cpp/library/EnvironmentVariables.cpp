@@ -22,11 +22,11 @@ namespace set_my_info {
     }
 
     optional <string> EnvironmentVariables::GetEnv(const char *env_name) {
-        if (env_name == 0) {
+        if (env_name == nullptr) {
             return nullopt;
         }
         const char *value = getenv(env_name);
-        if (value == 0) {
+        if (value == nullptr) {
             return nullopt;
         }
         return string(value);
