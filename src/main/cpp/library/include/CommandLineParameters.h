@@ -11,9 +11,9 @@ namespace set_my_info {
 
     class CommandLineParameters {
     public:
-        std::string command_name;
-        std::vector<std::string> parameters;
-        CommandLineParametersMap parameters_map;
+        std::string command_name_;
+        std::vector<std::string> parameters_;
+        CommandLineParametersMap parameters_map_;
 
         void Args(const int argc, const char *argv[]);
     };

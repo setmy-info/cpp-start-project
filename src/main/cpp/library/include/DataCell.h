@@ -5,9 +5,9 @@ namespace set_my_info {
 
     class DataCell {
     private:
-        DataType dataType;
+        DataType data_type_;
     public:
-        DataCell(DataType dataType);
+        DataCell(DataType data_type);
         virtual ~DataCell();
     };
 
