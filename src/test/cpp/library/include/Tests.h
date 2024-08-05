@@ -4,7 +4,7 @@
 #include "CppUnitTest.h"
 
 #include "Tests1.h"
-#include "DataTypesTest.h"
+#include "DataTypeTest.h"
 #include "EnvironmentVariablesTest.h"
 #include "CommandLineParametersTest.h"
 #include "CollectionTest.h"

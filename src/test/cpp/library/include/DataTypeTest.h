@@ -2,7 +2,7 @@
 #define	SET_MY_INFO_DATA_TYPES_TEST_H
 
 #include "CppUnitTest.h"
-#include "DataTypes.h"
+#include "DataType.h"
 
 BOOST_AUTO_TEST_SUITE(data_types_test)
 
@@ -95,21 +95,21 @@ BOOST_AUTO_TEST_SUITE(data_types_test)
         }
 
         BOOST_AUTO_TEST_CASE(data_type_enums_values) {
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::UINT8, 1);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::SINT8, 2);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::UINT16, 3);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::SINT16, 4);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::UINT32, 5);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::SINT32, 6);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::UINT64, 7);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::SINT64, 8);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::FLOAT, 9);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::DOUBLE, 10);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::LONG_DOUBLE, 11);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::DATE, 12);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::TIME, 13);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::DATE_TIME, 14);
-            BOOST_CHECK_EQUAL(set_my_info::DataTypes::STRING, 15);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::UINT8, 1);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::SINT8, 2);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::UINT16, 3);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::SINT16, 4);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::UINT32, 5);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::SINT32, 6);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::UINT64, 7);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::SINT64, 8);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::FLOAT, 9);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::DOUBLE, 10);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::LONG_DOUBLE, 11);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::DATE, 12);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::TIME, 13);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::DATE_TIME, 14);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::STRING, 15);
         }
 
     BOOST_AUTO_TEST_SUITE_END()
