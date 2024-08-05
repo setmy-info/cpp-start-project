@@ -1,5 +1,5 @@
 #ifndef SET_MY_INFO_DATA_TYPES_TEST_H
-#define	SET_MY_INFO_DATA_TYPES_TEST_H
+#define    SET_MY_INFO_DATA_TYPES_TEST_H
 
 #include "CppUnitTest.h"
 #include "DataType.h"
@@ -71,13 +71,13 @@ BOOST_AUTO_TEST_SUITE(data_types_test)
         }
 
         BOOST_AUTO_TEST_CASE(pointer_types_lengths) {
-            #ifdef __LP64__
-                BOOST_CHECK_EQUAL(sizeof(set_my_info::Pointer), 8);
-                BOOST_CHECK_EQUAL(sizeof(set_my_info::UPointerInt), 8);
-            #else
-                BOOST_CHECK_EQUAL(sizeof(set_my_info::Pointer), 4);
-                BOOST_CHECK_EQUAL(sizeof(set_my_info::UPointerInt), 4);
-            #endif
+#ifdef __LP64__
+            BOOST_CHECK_EQUAL(sizeof(set_my_info::Pointer), 8);
+            BOOST_CHECK_EQUAL(sizeof(set_my_info::UPointerInt), 8);
+#else
+            BOOST_CHECK_EQUAL(sizeof(set_my_info::Pointer), 4);
+            BOOST_CHECK_EQUAL(sizeof(set_my_info::UPointerInt), 4);
+#endif
 
         }
 

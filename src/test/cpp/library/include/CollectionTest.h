@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_SUITE(collection_test)
             std::vector<int> vec3 = {7, 8, 9};
             const std::vector<std::vector<int>> in = {vec1, vec2, vec3};
 
-            const std::vector<int> result = apply_concat_many(in);
+            const std::vector<int> result = ApplyConcatMany(in);
 
             BOOST_CHECK_EQUAL(result.size(), 9);
             BOOST_CHECK_EQUAL(result[0], 1);
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_SUITE(collection_test)
                 return std::make_pair(x, y);
             };
 
-            std::vector<std::pair<int, std::string>> result = product(list_a, list_b, product_function);
+            std::vector<std::pair<int, std::string>> result = Product(list_a, list_b, product_function);
 
             BOOST_CHECK_EQUAL(result.size(), 6);
             BOOST_CHECK_EQUAL(result[0].first, 1);
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_SUITE(collection_test)
             std::vector<int> list_a = {1, 2, 3};
             std::vector<std::string> list_b = {"a", "b"};
 
-            std::vector<std::pair<int, std::string>> result = product_as_pairs(list_a, list_b);
+            std::vector<std::pair<int, std::string>> result = ProductAsPairs(list_a, list_b);
 
             BOOST_CHECK_EQUAL(result.size(), 6);
             BOOST_CHECK_EQUAL(result[0].first, 1);

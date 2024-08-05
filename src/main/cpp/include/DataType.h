@@ -33,11 +33,11 @@ namespace set_my_info {
 
     using Pointer = void *;
 
-    #if defined(__LP64__)
-        using UPointerInt = UInt64;
-    #else
-        using UPointerInt = UInt32;
-    #endif
+#if defined(__LP64__)
+    using UPointerInt = UInt64;
+#else
+    using UPointerInt = UInt32;
+#endif
 
     using Type = UInt64;
     using UPosition = UInt64;

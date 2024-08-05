@@ -1,6 +1,8 @@
 #ifndef CPP_START_PROJECT_DATA_CELL_H
 #define CPP_START_PROJECT_DATA_CELL_H
 
+#include "DataType.h"
+
 namespace set_my_info {
 
     class DataCell {
@@ -8,6 +10,7 @@ namespace set_my_info {
         DataType data_type_;
     public:
         DataCell(DataType data_type);
+
         virtual ~DataCell();
     };
 

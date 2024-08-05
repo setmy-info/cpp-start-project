@@ -1,5 +1,5 @@
 #ifndef SET_MY_INFO_TESTS_H_
-#define	SET_MY_INFO_TESTS_H_
+#define    SET_MY_INFO_TESTS_H_
 
 #include "CppUnitTest.h"
 

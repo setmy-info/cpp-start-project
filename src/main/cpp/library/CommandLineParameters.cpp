@@ -12,7 +12,7 @@ namespace set_my_info {
             this->parameters_.push_back(tmp);
         }
 
-        for (const auto& parameter: this->parameters_) {
+        for (const auto &parameter: this->parameters_) {
             std::istringstream iss(parameter);
             std::string option;
             std::getline(iss, option, '=');
