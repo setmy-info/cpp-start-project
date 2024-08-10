@@ -1,14 +1,16 @@
-FROM setmyinfo/setmy-info-rocky:latest AS rpm_build_image
+FROM debian:latest AS deb_build_image
 
-RUN mkdir -p /var/opt/setmy-info/build && \
-    chown -R microservice:microservice /var/opt/setmy-info/build && \
-    dnf install -y cpp gcc g++ boost-test boost-devel boost-program-options valgrind libjpeg-devel libtiff libtiff-devel libtiff gtk4 gtk4-devel eog make dos2unix yum-utils rpmdevtools rpm-build gzip bzip2 xz zip rpm tree rpmlint file
+RUN apt-get -y update
+
+RUN apt-get -y upgrade
+
+RUN mkdir -p /var/opt/setmy-info/build
+
+RUN apt-get -y install cpp gcc g++ libboost-test-dev libboost-dev libboost-program-options-dev valgrind libjpeg-dev libtiff-dev make dos2unix gzip bzip2 xz-utils zip
 
 WORKDIR /opt
 ADD https://github.com/Kitware/CMake/releases/download/v3.30.2/cmake-3.30.2-linux-x86_64.tar.gz /opt
 RUN tar xvzf cmake-3.30.2-linux-x86_64.tar.gz && ln -s /opt/cmake-3.30.2-linux-x86_64 /opt/cmake && ls -la
-
-WORKDIR /var/opt/setmy-info/build
 
 COPY ./src/ ./src/
 COPY CMakeLists.txt ./
