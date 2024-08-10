@@ -29,14 +29,12 @@ RUN dnf install -y epel-release && \
     dnf config-manager --set-enabled rt && \
     dnf update -y && \
     mkdir -p /var/opt/setmy.info/build && \
-    chown -R microservice:microservice /var/opt/setmy.info/build && \
     dnf install -y cpp gcc g++ boost-test boost-devel boost-program-options valgrind libjpeg-devel libtiff libtiff-devel libtiff gtk4 gtk4-devel eog make dos2unix yum-utils rpmdevtools rpm-build rpm rpmlint
 
 WORKDIR /opt
 ADD https://github.com/Kitware/CMake/releases/download/v3.30.2/cmake-3.30.2-linux-x86_64.tar.gz /opt
 RUN tar xvzf cmake-3.30.2-linux-x86_64.tar.gz && ln -s /opt/cmake-3.30.2-linux-x86_64 /opt/cmake && ls -la
 
-USER microservice
 WORKDIR /var/opt/setmy.info/build
 
 COPY ./src/ ./src/
@@ -44,6 +42,9 @@ COPY CMakeLists.txt ./
 COPY configure ./
 COPY changelog ./
 RUN dos2unix **/* && dos2unix ./configure && dos2unix ./src/main/sh/build/packages-build.sh &&  chmod ugoa+x ./src/main/sh/build/packages-build.sh
+RUN chown -R microservice:microservice /var/opt/setmy.info/build
+
+USER microservice
 
 RUN ./src/main/sh/build/packages-build.sh
 COPY --from=deb_build_image /var/opt/setmy.info/build/cpp-start-project-1.0.0.x86_64.deb /var/opt/setmy.info/build/cpp-start-project-1.0.0.x86_64.deb
