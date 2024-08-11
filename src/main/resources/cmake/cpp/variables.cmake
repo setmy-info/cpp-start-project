@@ -1,6 +1,8 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- cpp variables.cmake")
 
+SET (CPP_MAIN_MAN_SOURCES_PATH ${MAIN_MAN_SOURCES_PATH}/main)
+
 # -Wall -Wextra -pedantic -Werror -Wfloat-conversion
 ADD_COMPILE_OPTIONS(-Wall -Wextra -pedantic)
 ADD_COMPILE_OPTIONS(-DPTHREADSAFE)
