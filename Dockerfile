@@ -13,6 +13,7 @@ WORKDIR /var/opt/setmy.info/build
 COPY ./src/ ./src/
 COPY CMakeLists.txt ./
 COPY configure ./
+COPY changelog ./
 RUN dos2unix **/* && dos2unix ./configure && dos2unix ./src/main/sh/build/packages-build.sh &&  chmod ugoa+x ./src/main/sh/build/packages-build.sh
 
 RUN ./src/main/sh/build/packages-build.sh
@@ -46,5 +47,5 @@ COPY --from=deb_build_image /var/opt/setmy.info/build/cpp-start-project-1.0.0.x8
 
 RUN ./src/main/sh/build/packages-build.sh
 RUN ls -la
-#RUN rpm -i ./cpp-start-project-1.0.0.x86_64.rpm
-#RUN ls -la /opt/setmy.info
+RUN rpm -i ./cpp-start-project-1.0.0.x86_64.rpm
+RUN ls -la /opt/setmy.info
