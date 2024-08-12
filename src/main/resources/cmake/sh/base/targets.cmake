@@ -22,6 +22,7 @@ ADD_CUSTOM_TARGET(makeDirectories
     mkdir -p ${SMI_VAR_PATH}
 )
 
+ADD_CUSTOM_TARGET(buildMan             echo cp ${BASE_MAN_SOURCES_PATH}/man1/*.1 ${MAN_OUTPUT_PATH}/man1 && echo gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
 ADD_CUSTOM_TARGET(buildEtc             echo cp -R ${MAIN_SH_SOURCES_PATH}/etc/profile.d/* ${ETC_OUTPUT_PATH}/profile.d)
 ADD_CUSTOM_TARGET(buildLibShells       echo cp ${MAIN_SH_SOURCES_PATH}/lib/*.sh ${LIBRARY_OUTPUT_PATH} && echo cp ${MAIN_SH_SOURCES_PATH}/lib/*.txt ${LIBRARY_OUTPUT_PATH})
 ADD_CUSTOM_TARGET(buildShellScripts    echo cp ${MAIN_SH_SOURCES_PATH}/bin/* ${BINARY_OUTPUT_PATH})
