@@ -2,6 +2,7 @@
 
 #include <new>
 #include <cstring>
+#include <algorithm>
 
 namespace set_my_info {
 
@@ -217,15 +218,16 @@ namespace set_my_info {
         }
     }
 
-    Boolean DataCell::setString(const char *const value) {
+    Boolean DataCell::setString(const char *const value, size_t max_copy_length) {
         try {
             if (this->data_ != nullptr) {
                 this->free();
             }
             const size_t length = std::strlen(value);
-            this->allocate(length + 1);
-            std::strncpy((char *) this->data_, value, length);
-            this->data_[length] = 0;
+            size_t copy_length = std::min(length, max_copy_length);
+            this->allocate(copy_length + 1);
+            std::strncpy((char *) this->data_, value, copy_length);
+            this->data_[copy_length] = 0;
             return true;
         } catch (std::bad_alloc &badAllocException) {
             return false;

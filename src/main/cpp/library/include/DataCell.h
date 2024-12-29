@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include "DataType.h"
+#include "Defaults.h"
 
 namespace set_my_info {
 
@@ -22,7 +23,7 @@ namespace set_my_info {
         template<typename T>
         Boolean setStruct(const T &value);
 
-        Boolean setString(const char *const value);
+        Boolean setString(const char *const value, size_t max_copy_length = CPP_START_PROJECT_MAX_DATA_CELL_STRING_LENGHT);
 
     public:
         DataCell();
