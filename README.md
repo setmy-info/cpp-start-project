@@ -31,7 +31,7 @@ PROJECT_VERSION=1.0.0 && ./configure release && make clean && make all test pack
 
 **./configure** options
 
-**ci** - synonyme for release
+**ci** - synonyms for release
 
 **release** -
 verification (unit tests, integration tests incl. valgrind tests), release (no debug info) binaries, stripped, without
