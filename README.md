@@ -56,6 +56,14 @@ modified:   src/test/cpp/library/include/Tests.h
 modified:   src/test/resources/cmake/cpp/library/tests.txt
 ```
 
+## Experiments with Windows
+
+export PATH=/c/pub/cmake-4.0.3-windows-x86_64/bin:$PATH
+cd /C/sources/setmy.info/submodules/cpp-start-project
+cmake -DVERIFY_USED=true -DPROJECT_IS_SNAPSHOT=true -DCONFIGURE_MODE=Real -DCMAKE_BUILD_TYPE=Debug .
+cmake -DVERIFY_USED=true -DPROJECT_IS_SNAPSHOT=true -DCONFIGURE_MODE=Real -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=toolchain-mingw64.cmake .
+cmake -G "MSYS Makefiles" -DVERIFY_USED=true -DPROJECT_IS_SNAPSHOT=true -DCONFIGURE_MODE=Real -DCMAKE_BUILD_TYPE=Debug .
+
 ## TODO
 
 Mostly code from HASS:

@@ -68,6 +68,11 @@ namespace set_my_info {
         Time time;
     };
 
+    struct UUID {
+        UInt64 high;
+        UInt64 low;
+    };
+
     enum DataType {
         NO_TYPE = 0,
         BOOLEAN,
@@ -85,6 +90,7 @@ namespace set_my_info {
         DATE,
         TIME,
         DATE_TIME,
+        UUID_TYPE,
         STRING,
     };
 }
