@@ -109,6 +109,10 @@ BOOST_AUTO_TEST_SUITE(data_types_test)
             BOOST_CHECK_EQUAL(sizeof(set_my_info::DateTime), 24);
         }
 
+        BOOST_AUTO_TEST_CASE(uuid_type_length) {
+            BOOST_CHECK_EQUAL(sizeof(set_my_info::UUID), 16);
+        }
+
         BOOST_AUTO_TEST_CASE(data_type_enums_values) {
             BOOST_CHECK_EQUAL(set_my_info::DataType::NO_TYPE, 0);
             BOOST_CHECK_EQUAL(set_my_info::DataType::BOOLEAN, 1);
@@ -126,7 +130,8 @@ BOOST_AUTO_TEST_SUITE(data_types_test)
             BOOST_CHECK_EQUAL(set_my_info::DataType::DATE, 13);
             BOOST_CHECK_EQUAL(set_my_info::DataType::TIME, 14);
             BOOST_CHECK_EQUAL(set_my_info::DataType::DATE_TIME, 15);
-            BOOST_CHECK_EQUAL(set_my_info::DataType::STRING, 16);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::UUID_TYPE, 16);
+            BOOST_CHECK_EQUAL(set_my_info::DataType::STRING, 17);
         }
 
     BOOST_AUTO_TEST_SUITE_END()
