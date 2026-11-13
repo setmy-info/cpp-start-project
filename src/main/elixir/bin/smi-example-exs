@@ -1,0 +1,6 @@
+#!/usr/bin/env elixir
+# Example of an Elixir script: installed into bin as it is and run by the elixir on PATH. Nothing
+# is compiled; a script that needs packages from hex.pm is better compiled with the application,
+# so that no machine downloads them when it runs.
+
+IO.puts("Hello from an Elixir script, arguments: #{inspect(System.argv())}")

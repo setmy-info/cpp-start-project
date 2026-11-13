@@ -24,6 +24,7 @@ test/package.json
 test/.stealer/clone/
 test/.stealer/copy/
 .idea/
+.idea_clion/
 *.iml
 target
 /src/main/resources/cmake/developer.txt
@@ -41,3 +42,19 @@ _deps
 CPackConfig.cmake
 CPackSourceConfig.cmake
 
+.venv
+.ipynb_checkpoints
+out/
+.junie
+*.dmg
+**/*.cmake
+**.cmake
+*.cmake
+# No .cmake file is committed: the whole build is CMakeLists.txt, every .cmake file is cmake output.
+
+# Elixir: Mix works under target/, these are the places it uses when run elsewhere
+/_build/
+/deps/
+.elixir_ls/
+erl_crash.dump
+*.ez

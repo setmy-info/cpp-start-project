@@ -1,4 +1,0 @@
-# PLACEHOLDER-BEGIN #
-MESSAGE("-- main etc.cmake")
-
-# PLACEHOLDER-END #

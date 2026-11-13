@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Author: Imre Tabur
+# Runs <name>.bin of the directory of this script, with the libraries of the lib directory beside
+# it. The build tree and the installation have the same bin and lib, so no path is written here.
+BIN_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+LD_LIBRARY_PATH="${BIN_DIR}/../lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+export LD_LIBRARY_PATH
+
+exec "${BIN_DIR}/$(basename -- "$0").bin" "$@"

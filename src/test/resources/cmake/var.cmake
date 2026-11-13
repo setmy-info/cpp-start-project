@@ -1,4 +1,0 @@
-# PLACEHOLDER-BEGIN #
-MESSAGE("-- test var.cmake")
-
-# PLACEHOLDER-END #

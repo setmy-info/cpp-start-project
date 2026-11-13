@@ -1,0 +1,454 @@
+
+def runCommand(String command) {
+    if (isUnix()) {
+        sh command
+    } else {
+        bat command
+    }
+}
+
+pipeline {
+
+    /*
+    version 1.3.0 - draft branch added. LIVE gets two stages: live draft stage (DRAFT_TO_LIVE)
+                    and live publish stage (MASTER_TO_LIVE). The draft build is the release: it
+                    publishes the release package to package storage and deploys it to the live
+                    draft stage. Users accept it by merging draft to master. The master build
+                    still builds and tests, but publishes nothing - it promotes the already
+                    published package from the live draft stage to the live publish stage.
+                    Releases are immutable: what goes live is the very package that was
+                    reviewed, never a rebuild. Software without drafting keeps the 1.2.0 flow,
+                    where master releases and publishes - see "without draft" below.
+                    TEST gets the same two stages, test draft stage and test publish stage, so
+                    that TEST is set up as much as possible like LIVE - see "TEST" below. The
+                    pipeline deploys only to the test draft stage; the test publish stage is
+                    reserved, its *_TO_TEST_PUBLISH flags are commented out.
+    version 1.2.0 - release* no longer deploys to DEV: the RELEASE_TO_DEV flag and the release
+                    branch of the 'dev' deploy stage are gone. release* deploys to TEST and
+                    PRELIVE only. develop -> DEV is unchanged.
+    version 1.1.0 - pollSCM instead of cron (build on new commits, not on a timer),
+                    quietPeriod + disableConcurrentBuilds(abortPrevious: true) so that a burst
+                    of commits becomes one build of the newest change,
+                    release* added to Publish/Snapshot: develop, release* and hotfix* all publish
+                    a candidate of unknown quality
+                    TEST environment renamed to the ADR-0041 canonical name
+    version 1.0.1 - fileExists precondition check now actually gates (was a discarded boolean)
+
+    Git branches flow: develop -> feature -> develop -> release -> draft -> master
+
+    Building only the newest change
+    Every branch is polled for new commits, and commits arrive in bursts. Building each one of
+    them is wasted work, so a burst is collapsed twice: quietPeriod folds the commits that have
+    not started building yet into a single build, and disableConcurrentBuilds(abortPrevious:
+    true) aborts a run that is already in progress as soon as a newer one is ready. What gets
+    built is the newest change; the intermediate ones are skipped, not queued. See the options
+    block.
+
+    Steps
+    1. Enhancement event
+    2. feature branch from develop
+    3. Enhancements in feature branch - built on new commits, only the newest change is built
+    4. After successful build merge to develop - built on new commits, only the newest change is built
+    5. Go-No go event: Positive release and release testing decision by DEV and TEST environments
+    6. Make release branch - built on new commits, only the newest change is built. Code freeze period started.
+    7. Go-No go event: Positive release decision by DEV, TEST, PRELIVE environments
+    8. Merge release branch to draft - built on new commits, the release package is published to
+       package storage and deployed to the live draft stage. Users review it on the live system,
+       nobody else sees it yet.
+    9. Go-No go event: users accept the draft. Not accepted - fix in release with a new version
+       (a published release is immutable) and go to step 8 again.
+    10. Merge draft to master (fast-forward, so master is exactly the reviewed commit) - built and
+        tested, the reviewed package is promoted from live draft stage to live publish stage, tagged. Code
+        freeze period ended.
+    11. Found a bug in production
+    12. hotfix branch from master
+    13. Enhancements in hotfix branch - built on new commits, only the newest change is built
+    14. Go-No go event: the hotfix is deployed to TEST and PRELIVE, where QA validates and
+        verifies it. The decision taken there is either "this is verified" - go to step 17 - or
+        "this needs more testing" - go to step 15.
+    15. Hotfix merged to develop, when the decision at step 14 asked for more testing.
+    16. The development flow continues from step 4, so the fix now also reaches DEV and is
+        tested again together with everything else on develop.
+    17. Hotfix merged to draft, reviewed there, and draft merged to master (steps 8-10). master is
+        what deploys live and tags.
+
+    Automatic deployments to environments: every deployment below is triggered by the build
+    itself and gated only by the *_TO_* flags in the environment block. There is no manual
+    approval step (no input step) anywhere in this pipeline. The user acceptance of a draft is
+    not an input step either: it is the merge of draft to master.
+
+    draft - releasing to LIVE in two stages. The live draft stage is LIVE, only not visible to
+    everyone yet: reviewers see it, users accept it there. The live publish stage is what
+    everyone sees. Mostly for web, PWA, FE and CMS kind of projects. The draft build publishes
+    the release package, once; from then on that package is only moved, never built again. How
+    the package gets from the live draft stage to the live publish stage (install it again from
+    package storage, move or switch it on the target, ...) is up to the project. The live draft
+    stage holds one change: while it waits for acceptance, the next one waits behind it or is
+    accepted together with it.
+
+    TEST - set up as much as possible like LIVE, so that every aspect of LIVE can be tested
+    there, the move from draft stage to publish stage included. Every TEST deployment (develop,
+    release*, hotfix*) deploys to the test draft stage, gated by the *_TO_TEST_DRAFT flags. The
+    test publish stage is reserved: its *_TO_TEST_PUBLISH flags are commented out in the
+    environment block, so the pipeline skips it and the draft is published there manually or
+    with other tools. Uncommenting a flag switches the test publish stage on for that branch.
+
+    without draft - software that is not drafted has no draft branch, the flow is release ->
+    master and master is the release, as in 1.2.0. The build shifts back to master: Release
+    and Release reports run on branch 'master' instead of 'draft', DRAFT_TO_LIVE is not used,
+    and master publishes the release and deploys it to the live publish stage. Steps 8-10
+    become one step: merge release to master. Hotfixes are merged to master directly.
+
+    hotfix* - branched from master, one fix, quick review, then TEST and PRELIVE, where
+    QA validates and verifies it. It deliberately does not deploy to DEV: DEV is the
+    development integration target and a hotfix integrates nothing. If QA decides the fix
+    needs more testing it is merged to develop, and it reaches DEV through the normal
+    development flow from there. A hotfix is merged to draft and draft to master to go live,
+    and master is what deploys live and tags - a hotfix never goes live directly.
+
+    No pull request builds.
+
+    [6 branches] x [4 environments, TEST and LIVE in draft and publish stages]. feature*
+    deploys nowhere: it is built and tested only.
+    */
+
+    agent any
+
+    triggers {
+        // pollSCM, not cron: cron fires on the timer whether or not anything was pushed, so it
+        // builds the same commit over and over. pollSCM asks the SCM every 5 minutes and only
+        // triggers when there really are new commits. H spreads the poll across the interval so
+        // that all jobs do not hit the SCM in the same second.
+        //
+        // In a MULTIBRANCH pipeline this is redundant and costs more than it gives: the folder
+        // already discovers commits by branch indexing, and this makes every branch job poll the
+        // repository separately on top of that - N branches, N pollers, all against one remote.
+        // The multibranch way is to leave this out and drive builds from either a webhook (best:
+        // instant, no polling at all) or the folder's own "Scan Multibranch Pipeline Triggers".
+        // It is kept here because this Jenkinsfile is also meant to work as a single branch job,
+        // where nothing else would trigger it.
+        pollSCM('H/5 * * * *')
+    }
+
+    options {
+        buildDiscarder(
+            logRotator(
+                numToKeepStr: '20',
+                artifactNumToKeepStr: '10'
+            )
+        )
+
+        // Commits arrive in bursts, and building every intermediate commit is wasted work.
+        // Two different mechanisms are needed, because they solve two different halves:
+        //
+        // quietPeriod - the burst that has not started building yet. After a trigger Jenkins
+        // holds the queue item this long before it becomes buildable, and every further commit
+        // inside the window folds into the same build.
+        //
+        // Both of these are PER JOB, and in a multibranch pipeline every branch is its own job.
+        // A quiet period on one branch does not hold another branch back - their windows count
+        // down at the same time - but it does delay every branch by this much, which is very
+        // visible when several branches are pushed at once. Keep it short: it only has to cover
+        // how long a push burst takes, not how long a build takes. Set it to 0 while testing the
+        // pipeline itself.
+        //
+        // disableConcurrentBuilds(abortPrevious: true) - the build that is already running.
+        // Without it Jenkins starts a second run beside the first whenever an executor is
+        // free, so several intermediate commits build at once. With it the runs of THIS branch
+        // are serialised, and abortPrevious kills the older run the moment a newer one is ready:
+        // the newest change wins and the superseded ones never finish. Other branches are not
+        // affected - if branches are waiting for each other, that is the executor count, not
+        // this option.
+        quietPeriod(15)
+        disableConcurrentBuilds(abortPrevious: true)
+    }
+
+    environment {
+        PATH = "/opt/setmy.info/bin:/opt/cmake/bin:$PATH"
+
+        SMI_PROFILES = 'ci'
+
+        // The machines of each deploy target are not in this file, they are configuration of
+        // Jenkins: global properties or the folder of the job, one variable per target, read by
+        // make deploy-<target> (see section 12 of CMakeLists.txt and make deploy-help):
+        //   SMI_DEPLOY_DEV_HOSTS, SMI_DEPLOY_TEST_HOSTS, SMI_DEPLOY_PRELIVE_HOSTS,
+        //   SMI_DEPLOY_LIVE_HOSTS, and SMI_DEPLOY_<ENVIRONMENT>_<ROLE>_HOSTS for machine roles,
+        //   SMI_DEPLOY_LIVE_FE_HOSTS for example. [user@]host[:port], several separated by spaces.
+        // Every SMI_* variable is also a @SMI_...@ placeholder of the *.in files of the build.
+
+        SMI_MAIL_TO = 'has@gintra'
+
+        MASTER_TO_LIVE = 'DEPLOY'
+        DRAFT_TO_LIVE = 'DEPLOY'
+
+        RELEASE_TO_PRELIVE = 'DEPLOY'
+        HOTFIX_TO_PRELIVE = 'DEPLOY'
+
+        DEVELOPMENT_TO_TEST_DRAFT = 'DEPLOY'
+        RELEASE_TO_TEST_DRAFT = 'DEPLOY'
+        HOTFIX_TO_TEST_DRAFT = 'DEPLOY'
+
+        //DEVELOPMENT_TO_TEST_PUBLISH = 'DEPLOY'
+        //RELEASE_TO_TEST_PUBLISH = 'DEPLOY'
+        //HOTFIX_TO_TEST_PUBLISH = 'DEPLOY'
+
+        DEVELOPMENT_TO_DEV = 'DEPLOY'
+    }
+
+    stages {
+        stage('Inspection') {
+            parallel {
+                stage('Pre-build') {
+                    /*
+                    Stage to get into build logs pre build existing environment conditions, versions, getting CI build
+                    info into log etc.
+                    */
+                    steps {
+                        echo "Jenkins node: ${env.NODE_NAME}"
+                        echo "Operating system: ${isUnix() ? 'Unix/Linux' : 'Windows'}"
+
+                        script {
+                            if (!fileExists('README.md')) {
+                                error('README.md missing')
+                            }
+                            if (!fileExists('CMakeLists.txt')) {
+                                error('CMakeLists.txt missing')
+                            }
+                        }
+
+                        runCommand 'cmake --version'
+                        runCommand 'make --version'
+                        runCommand 'g++ --version'
+                        runCommand 'rpmbuild --version'
+                        runCommand 'elixir --version || echo "No Elixir: the Elixir sources are not built"'
+                        runCommand 'command -v smi-deploy'
+                    }
+                }
+                /*
+                Stage to install build required tools. Build dependencies.
+                */
+                stage('Build tools') {
+                    steps {
+                        echo 'Build tools are installed on the node: cmake, make, g++, boost, valgrind, rpm-build'
+                    }
+                }
+            }
+        }
+
+        stage('Preparation') {
+            parallel {
+                /*
+                Stage to install language and source, language code dependencies.
+                */
+                stage('Install') {
+                    steps {
+                        runCommand './configure ci'
+                    }
+                }
+            }
+        }
+
+        /*
+        Stage to build code with with executing all needed steps to measure different type of code quality.
+        */
+        stage('Build') {
+            steps {
+                runCommand 'make clean'
+
+                echo 'Compilation and the unit tests binaries'
+                runCommand 'make all'
+
+                echo 'Unit tests, integration tests and valgrind tests'
+                runCommand 'ctest --output-on-failure'
+
+                echo 'Packaging: the main package and the configuration packages of src/main/config'
+                runCommand 'make package'
+
+                runCommand 'make deploy-help'
+            }
+        }
+
+        stage('Publish') {
+            parallel {
+                /*
+                Stage to push or upload build packages/artifacts to file storage systems.
+                */
+                stage('Release') {
+                    when {
+                        branch 'draft'
+                        // changeset "**/file/to/be/changed"
+                    }
+                    steps {
+                        echo 'Put here software release steps'
+                    }
+                }
+                stage('Snapshot') {
+                    when {
+                        branch pattern: 'devel.*', comparator: 'REGEXP'
+                    }
+                    steps {
+                        echo 'Put here software snapshot publishing steps'
+                    }
+                }
+                stage('Release reports') {
+                    when {
+                        branch 'draft'
+                    }
+                    steps {
+                        echo 'Put here reports publishing steps'
+                    }
+                }
+                stage('Snapshot reports') {
+                    when {
+                        branch pattern: 'devel.*', comparator: 'REGEXP'
+                    }
+                    steps {
+                        echo 'Put here reports publishing steps'
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            parallel {
+                /*
+                Stages to deploy/install artifacts to different environments.
+                */
+                stage('dev') {
+                    when {
+                        environment name: 'DEVELOPMENT_TO_DEV', value: 'DEPLOY'
+                        branch pattern: 'devel.*', comparator: 'REGEXP'
+                    }
+                    steps {
+                        runCommand 'make deploy-dev'
+                    }
+                }
+                stage('test: draft') {
+                    when {
+                        anyOf {
+                            allOf {
+                                environment name: 'DEVELOPMENT_TO_TEST_DRAFT', value: 'DEPLOY'
+                                branch pattern: 'devel.*', comparator: 'REGEXP'
+                            }
+                            allOf {
+                                environment name: 'RELEASE_TO_TEST_DRAFT', value: 'DEPLOY'
+                                branch pattern: 'release.*', comparator: 'REGEXP'
+                            }
+                            allOf {
+                                environment name: 'HOTFIX_TO_TEST_DRAFT', value: 'DEPLOY'
+                                branch pattern: 'hotfix.*', comparator: 'REGEXP'
+                            }
+                        }
+                    }
+                    steps {
+                        runCommand 'make upload-test'
+                        runCommand 'SMI_DEPLOY_STAGE=draft make handover-test'
+                    }
+                }
+                stage('test: publish') {
+                    when {
+                        anyOf {
+                            allOf {
+                                environment name: 'DEVELOPMENT_TO_TEST_PUBLISH', value: 'DEPLOY'
+                                branch pattern: 'devel.*', comparator: 'REGEXP'
+                            }
+                            allOf {
+                                environment name: 'RELEASE_TO_TEST_PUBLISH', value: 'DEPLOY'
+                                branch pattern: 'release.*', comparator: 'REGEXP'
+                            }
+                            allOf {
+                                environment name: 'HOTFIX_TO_TEST_PUBLISH', value: 'DEPLOY'
+                                branch pattern: 'hotfix.*', comparator: 'REGEXP'
+                            }
+                        }
+                    }
+                    steps {
+                        runCommand 'make handover-test'
+                    }
+                }
+                stage('prelive') {
+                    when {
+                        anyOf {
+                            allOf {
+                                environment name: 'RELEASE_TO_PRELIVE', value: 'DEPLOY'
+                                branch pattern: 'release.*', comparator: 'REGEXP'
+                            }
+                            allOf {
+                                environment name: 'HOTFIX_TO_PRELIVE', value: 'DEPLOY'
+                                branch pattern: 'hotfix.*', comparator: 'REGEXP'
+                            }
+                        }
+                    }
+                    steps {
+                        runCommand 'make deploy-prelive'
+                    }
+                }
+                stage('live: draft') {
+                    when {
+                        environment name: 'DRAFT_TO_LIVE', value: 'DEPLOY'
+                        branch 'draft'
+                    }
+                    steps {
+                        runCommand 'make upload-live'
+                        runCommand 'SMI_DEPLOY_STAGE=draft make handover-live'
+                    }
+                }
+                stage('live: publish') {
+                    when {
+                        environment name: 'MASTER_TO_LIVE', value: 'DEPLOY'
+                        branch 'master'
+                    }
+                    steps {
+                        // The packages the draft build uploaded and the reviewers accepted, handed over
+                        // again, to the published directory: not a rebuild. Software without drafting
+                        // uploads here as well: make deploy-live.
+                        runCommand 'make handover-live'
+                    }
+                }
+            }
+        }
+        /*
+        Stage to make SCM tag. As all results are succeeded then tag reflects FULL build success.
+        */
+        stage('Tag') {
+            when {
+                environment name: 'MASTER_TO_LIVE', value: 'DEPLOY'
+                branch 'master'
+            }
+            steps {
+                runCommand "smi-new-tag \$(sed -n 's/^SET (PROJECT_VERSION_\\(MAJOR\\|MINOR\\|PATCH\\) *\\([0-9]*\\))\$/\\2/p' CMakeLists.txt | paste -sd.)"
+            }
+        }
+    }
+
+    post {
+        always {
+            runCommand 'ls -l *.rpm || true'
+        }
+
+        success {
+            emailext (
+                to: "${SMI_MAIL_TO}",
+                subject: "Jenkins job: $JOB_NAME, build: $BUILD_NUMBER type: SUCCESSFUL",
+                body: "Job: $JOB_NAME, build: $BUILD_NUMBER, url: ${env.BUILD_URL}, git: ${env.GIT_URL}, branch: ${env.GIT_BRANCH} SUCCESSFUL post step"
+            )
+        }
+
+        unstable {
+            emailext (
+                to: "${SMI_MAIL_TO}",
+                subject: "Jenkins job: $JOB_NAME, build: $BUILD_NUMBER type: UNSTABLE",
+                body: "Job: $JOB_NAME, build: $BUILD_NUMBER, url: ${env.BUILD_URL}, git: ${env.GIT_URL}, branch: ${env.GIT_BRANCH} UNSTABLE post step"
+            )
+        }
+
+        failure {
+            emailext (
+                to: "${SMI_MAIL_TO}",
+                subject: "Jenkins job: $JOB_NAME, build: $BUILD_NUMBER type: FAILED",
+                body: "Job: $JOB_NAME, build: $BUILD_NUMBER, url: ${env.BUILD_URL}, git: ${env.GIT_URL}, branch: ${env.GIT_BRANCH}  FAILED post step",
+                attachLog: true,
+                compressLog: true
+            )
+        }
+    }
+}
