@@ -1,6 +1,0 @@
-# PLACEHOLDER-BEGIN #
-MESSAGE("-- sh var.cmake")
-
-INCLUDE_CMAKE_FILE(${MAIN_CMAKE_PATH}/sh/base/var.cmake)
-
-# PLACEHOLDER-END #

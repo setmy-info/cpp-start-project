@@ -7,6 +7,7 @@ IF(VERIFY_USED)
 ADD_TEST(NAME valgrind_data_types_test_ut COMMAND ${MEM_LEAK_TEST_COMMAND} ${BINARY_OUTPUT_PATH}/test.bin --run_test=data_types_test/ut)
 ENDIF()
 
-INCLUDE(${TEST_CPP_CMAKE_PATH}/library/tests.cmake)
+# tests.cmake of every module, as for a phase
+INCLUDE_MODULES_CMAKE_FILES(${TEST_CPP_CMAKE_PATH} tests)
 
 # PLACEHOLDER-END #

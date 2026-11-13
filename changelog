@@ -1,2 +1,9 @@
+* Fri Nov 13 2026 Imre Tabur <imre.tabur@mail.ee>
+- Languages and modules are found from their directories, no aggregator lists them.
+- Copy targets do nothing when their sources do not exist, no echo stubs to edit.
+- rpm and deb uninstall scripts keep the installation on an upgrade; deb scripts packaged.
+- /var/opt/setmy.info not packaged under /opt any more; macOS, Elixir, Erlang, HTML paths.
+- CMake 4.4 policies, update-versions.sh and check-files.sh build helpers.
+
 * Fri May 26 2023 Imre Tabur <imre.tabur@mail.ee>
 - Initial source code and structure from setmy-info-scripts project.

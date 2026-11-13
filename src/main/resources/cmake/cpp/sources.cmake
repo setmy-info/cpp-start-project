@@ -1,10 +1,9 @@
+# PLACEHOLDER-BEGIN #
 MESSAGE("-- main cpp sources.cmake")
 
 INCLUDE_DIRECTORIES("/usr/include")
-INCLUDE_DIRECTORIES_WINDOWS("C:\\pub\\boost_1_82_0")
-
-INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/javah/sources.cmake)
-INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/library/sources.cmake)
-INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/main/sources.cmake)
+# Forward slashes: a Windows path is valid with them, and a backslash in a macro argument is an
+# escape sequence or not depending on policy CMP0219.
+INCLUDE_DIRECTORIES_WINDOWS("C:/pub/boost_1_82_0")
 
 # PLACEHOLDER-END #

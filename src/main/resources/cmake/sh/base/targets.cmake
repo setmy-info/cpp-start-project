@@ -3,6 +3,8 @@ MESSAGE("-- base targets.cmake")
 
 ADD_CUSTOM_TARGET(makeDirectories
     mkdir -p ${BUILD_PATH} &&
+    mkdir -p ${BINARY_OUTPUT_PATH} &&
+    mkdir -p ${LIBRARY_OUTPUT_PATH} &&
     mkdir -p ${MAN_OUTPUT_PATH}/man1 &&
     mkdir -p ${MAN_OUTPUT_PATH}/man2 &&
     mkdir -p ${MAN_OUTPUT_PATH}/man3 &&
@@ -18,17 +20,25 @@ ADD_CUSTOM_TARGET(makeDirectories
     mkdir -p ${ETC_PROFILED_OUTPUT_PATH} &&
     mkdir -p ${INCLUDE_OUTPUT_PATH} &&
     mkdir -p ${ETC_SYSTEM_OUTPUT_PATH} &&
-    mkdir -p ${ETC_YUM_REPOS_PATH} &&
-    mkdir -p ${SMI_VAR_PATH}
+    mkdir -p ${ETC_YUM_REPOS_PATH}
 )
 
-ADD_CUSTOM_TARGET(buildMan             echo cp ${BASE_MAN_SOURCES_PATH}/man1/*.1 ${MAN_OUTPUT_PATH}/man1 && echo gzip -f ${MAN_OUTPUT_PATH}/man1/*.1)
-ADD_CUSTOM_TARGET(buildEtc             echo cp -R ${MAIN_SH_SOURCES_PATH}/etc/profile.d/* ${ETC_OUTPUT_PATH}/profile.d)
-ADD_CUSTOM_TARGET(buildLibShells       echo cp ${MAIN_SH_SOURCES_PATH}/lib/*.sh ${LIBRARY_OUTPUT_PATH} && echo cp ${MAIN_SH_SOURCES_PATH}/lib/*.txt ${LIBRARY_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildShellScripts    echo cp ${MAIN_SH_SOURCES_PATH}/bin/* ${BINARY_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildServiceScripts  echo cp ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.service ${ETC_SYSTEM_OUTPUT_PATH} && echo cp ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/environment.conf ${ETC_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildYumReposScripts echo cp ${MAIN_SH_SOURCES_PATH}/etc/yum.repos.d/*.repo ${ETC_YUM_REPOS_PATH})
-ADD_CUSTOM_TARGET(buildProfiles        echo cp -R ${MAIN_SH_SOURCES_PATH}/lib/profiles/* ${LIBRARY_OUTPUT_PATH}/profiles)
-ADD_CUSTOM_TARGET(buildPackages        echo cp -R ${MAIN_SH_SOURCES_PATH}/lib/packages/* ${LIBRARY_OUTPUT_PATH}/packages)
+# Each target copies what exists and does nothing otherwise, so these lines stay as they are in a
+# derived project, whichever of the directories it uses.
+ADD_MAN_TARGET(buildMan                           ${BASE_MAN_SOURCES_PATH} 1 2 3 4 5 6 7 8 9)
+ADD_COPY_DIRECTORY_TARGET(buildEtc                ${ETC_PROFILED_OUTPUT_PATH}       ${MAIN_SH_SOURCES_PATH}/etc/profile.d)
+ADD_COPY_TARGET(buildLibShells                    ${LIBRARY_OUTPUT_PATH}            ${MAIN_SH_SOURCES_PATH}/lib/*.sh ${MAIN_SH_SOURCES_PATH}/lib/*.txt)
+ADD_COPY_TARGET(buildShellScripts                 ${BINARY_OUTPUT_PATH}             ${MAIN_SH_SOURCES_PATH}/bin/*)
+# Units that need a path of the installation are *.in files, configured by configure.cmake.
+ADD_COPY_TARGET(buildServiceScripts               ${ETC_SYSTEM_OUTPUT_PATH}
+    ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.service
+    ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.timer
+    ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.path
+    ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.socket
+    ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/*.target)
+ADD_COPY_TARGET(buildServiceEnvironment           ${ETC_OUTPUT_PATH}                ${MAIN_SH_SOURCES_PATH}/etc/systemd/system/environment.conf)
+ADD_COPY_TARGET(buildYumReposScripts              ${ETC_YUM_REPOS_PATH}             ${MAIN_SH_SOURCES_PATH}/etc/yum.repos.d/*.repo)
+ADD_COPY_DIRECTORY_TARGET(buildProfiles           ${LIBRARY_OUTPUT_PATH}/profiles   ${MAIN_SH_SOURCES_PATH}/lib/profiles)
+ADD_COPY_DIRECTORY_TARGET(buildPackages           ${LIBRARY_OUTPUT_PATH}/packages   ${MAIN_SH_SOURCES_PATH}/lib/packages)
 
 # PLACEHOLDER-END #

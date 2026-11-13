@@ -1,7 +1,8 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- test cpp sources.cmake")
 
-INCLUDE(${TEST_CPP_CMAKE_PATH}/library/sources.cmake)
+# The modules first, as the test binary is built from the sources they collect.
+INCLUDE_MODULES_CMAKE_FILES(${TEST_CPP_CMAKE_PATH} sources)
 
 SET (GLOBAL_MODULE_TEST_PATH ${TEST_CPP_SOURCES_PATH})
 SET (GLOBAL_MODULE_TEST_SOURCES ${GLOBAL_MODULE_TEST_PATH}/CppUnitRunner.cpp ${LIBRARY_MODULE_TEST_SOURCES})

@@ -3,4 +3,8 @@ MESSAGE("-- base lib.cmake")
 
 #INSTALL(DIRECTORY "${LIBRARY_OUTPUT_PATH}/profiles"                  DESTINATION lib)
 
+IF(DISTRIBUTION STREQUAL "FreeBSD")
+#    INSTALL(FILES "${LIBRARY_OUTPUT_PATH}/freebsd.sh"                DESTINATION lib)
+ENDIF()
+
 # PLACEHOLDER-END #

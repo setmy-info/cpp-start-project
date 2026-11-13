@@ -24,6 +24,7 @@ test/package.json
 test/.stealer/clone/
 test/.stealer/copy/
 .idea/
+.idea_clion/
 *.iml
 target
 /src/main/resources/cmake/developer.txt
@@ -41,3 +42,9 @@ _deps
 CPackConfig.cmake
 CPackSourceConfig.cmake
 
+.venv
+.ipynb_checkpoints
+out/
+.junie
+*.dmg
+**/*.cmake

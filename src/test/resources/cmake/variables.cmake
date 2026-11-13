@@ -1,4 +1,6 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- test variables.cmake")
 
+INCLUDE_LANGUAGES_CMAKE_FILES(${TEST_CMAKE_PATH} variables)
+
 # PLACEHOLDER-END #

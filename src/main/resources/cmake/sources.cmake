@@ -1,8 +1,6 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- sources.cmake")
 
-IF(EXISTS ${MAIN_CMAKE_PATH}/cpp/sources.cmake)
-    INCLUDE(${MAIN_CMAKE_PATH}/cpp/sources.cmake)
-ENDIF()
+INCLUDE_LANGUAGES_CMAKE_FILES(${MAIN_CMAKE_PATH} sources)
 
 # PLACEHOLDER-END #

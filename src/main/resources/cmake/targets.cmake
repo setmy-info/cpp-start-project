@@ -6,15 +6,27 @@ SET (CMAKE_VERBOSE_MAKEFILE TRUE)
 ADD_CUSTOM_TARGET(build ALL)
 ADD_CUSTOM_TARGET(clear)
 
-ADD_CUSTOM_TARGET(buildGroovyScripts  echo cp ${MAIN_GROOVY_SOURCES_PATH}/lib/*.groovy ${LIBRARY_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildPythonScripts  echo cp ${MAIN_PYTHON_SOURCES_PATH}/lib/*.py ${LIBRARY_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(buildCLScripts      echo cp ${MAIN_COMMON_LISP_SOURCES_PATH}/bin/* ${BINARY_OUTPUT_PATH} && echo cp ${MAIN_COMMON_LISP_SOURCES_PATH}/lib/* ${LIBRARY_OUTPUT_PATH})
-ADD_CUSTOM_TARGET(clearBuild          rm -rf ./${TARGET_PATH})
-ADD_CUSTOM_TARGET(clearPkg            rm -rf ./${PROJECT_NAME}*.tar.gz ./${PROJECT_NAME}*.rpm ./${PROJECT_NAME}*.sh ./${PROJECT_NAME}*.deb ./${PROJECT_NAME}*.tar.Z ./${PROJECT_NAME}*.7z ./${PROJECT_NAME}*.tar.bz2 ./${PROJECT_NAME}*.tar.xz ./${PROJECT_NAME}*.zip)
-ADD_CUSTOM_TARGET(clearCmake          rm -rf ./*.cmake ./_CPack_Packages install_manifest.cmake CMakeCache.cmake)
+# Interpreted languages, the same way for each: src/main/<language>/bin/* goes to bin and the
+# content of src/main/<language>/lib to lib. A target of a language without sources does nothing,
+# so a project adds a language by adding its directory.
+ADD_COPY_TARGET(buildCmdScripts               ${BINARY_OUTPUT_PATH}  ${MAIN_CMD_SOURCES_PATH}/bin/*)
+ADD_COPY_DIRECTORY_TARGET(buildCmdLib         ${LIBRARY_OUTPUT_PATH} ${MAIN_CMD_SOURCES_PATH}/lib)
+ADD_COPY_TARGET(buildGroovyScripts            ${BINARY_OUTPUT_PATH}  ${MAIN_GROOVY_SOURCES_PATH}/bin/*)
+ADD_COPY_DIRECTORY_TARGET(buildGroovyLib      ${LIBRARY_OUTPUT_PATH} ${MAIN_GROOVY_SOURCES_PATH}/lib)
+ADD_COPY_TARGET(buildPythonScripts            ${BINARY_OUTPUT_PATH}  ${MAIN_PYTHON_SOURCES_PATH}/bin/*)
+ADD_COPY_DIRECTORY_TARGET(buildPythonLib      ${LIBRARY_OUTPUT_PATH} ${MAIN_PYTHON_SOURCES_PATH}/lib)
+ADD_COPY_TARGET(buildCLScripts                ${BINARY_OUTPUT_PATH}  ${MAIN_COMMON_LISP_SOURCES_PATH}/bin/*)
+ADD_COPY_DIRECTORY_TARGET(buildCLLib          ${LIBRARY_OUTPUT_PATH} ${MAIN_COMMON_LISP_SOURCES_PATH}/lib)
+ADD_COPY_TARGET(buildElixirScripts            ${BINARY_OUTPUT_PATH}  ${MAIN_ELIXIR_SOURCES_PATH}/bin/*)
+ADD_COPY_DIRECTORY_TARGET(buildElixirLib      ${LIBRARY_OUTPUT_PATH} ${MAIN_ELIXIR_SOURCES_PATH}/lib)
+ADD_COPY_TARGET(buildErlangScripts            ${BINARY_OUTPUT_PATH}  ${MAIN_ERLANG_SOURCES_PATH}/bin/*)
+ADD_COPY_DIRECTORY_TARGET(buildErlangLib      ${LIBRARY_OUTPUT_PATH} ${MAIN_ERLANG_SOURCES_PATH}/lib)
+
+ADD_CUSTOM_TARGET(clearBuild          rm -rf ${TARGET_PATH})
+ADD_CUSTOM_TARGET(clearPkg            rm -rf ./${PROJECT_NAME}*.tar.gz ./${PROJECT_NAME}*.rpm ./${PROJECT_NAME}*.sh ./${PROJECT_NAME}*.deb ./${PROJECT_NAME}*.tar.Z ./${PROJECT_NAME}*.7z ./${PROJECT_NAME}*.tar.bz2 ./${PROJECT_NAME}*.tar.xz ./${PROJECT_NAME}*.zip ./${PROJECT_NAME}*.dmg)
+ADD_CUSTOM_TARGET(clearCmake          rm -rf ./*.cmake ./_CPack_Packages install_manifest.txt CMakeCache.txt)
 ADD_CUSTOM_TARGET(site)
 
-INCLUDE_CMAKE_FILE(${MAIN_CPP_CMAKE_PATH}/targets.cmake)
-INCLUDE_CMAKE_FILE(${MAIN_SH_CMAKE_PATH}/targets.cmake)
+INCLUDE_LANGUAGES_CMAKE_FILES(${MAIN_CMAKE_PATH} targets)
 
 # PLACEHOLDER-END #
