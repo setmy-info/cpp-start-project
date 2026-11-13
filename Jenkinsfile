@@ -170,7 +170,7 @@ pipeline {
 
         // The machines of each deploy target are not in this file, they are configuration of
         // Jenkins: global properties or the folder of the job, one variable per target, read by
-        // make deploy-<target> (see src/main/resources/cmake/deploy.cmake.in and make deploy-help):
+        // make deploy-<target> (see section 12 of CMakeLists.txt and make deploy-help):
         //   SMI_DEPLOY_DEV_HOSTS, SMI_DEPLOY_TEST_HOSTS, SMI_DEPLOY_PRELIVE_HOSTS,
         //   SMI_DEPLOY_LIVE_HOSTS, and SMI_DEPLOY_<ENVIRONMENT>_<ROLE>_HOSTS for machine roles,
         //   SMI_DEPLOY_LIVE_FE_HOSTS for example. [user@]host[:port], several separated by spaces.
@@ -255,13 +255,13 @@ pipeline {
             steps {
                 runCommand 'make clean'
 
-                echo 'Compilation, the RPMs of src/main/rpm included'
+                echo 'Compilation and the unit tests binaries'
                 runCommand 'make all'
 
                 echo 'Unit tests, integration tests and valgrind tests'
                 runCommand 'ctest --output-on-failure'
 
-                echo 'Packaging: the CPack packages, beside the RPMs that make all built'
+                echo 'Packaging: the main package and the configuration packages of src/main/config'
                 runCommand 'make package'
 
                 runCommand 'make deploy-help'

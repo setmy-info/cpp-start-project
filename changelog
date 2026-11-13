@@ -1,4 +1,9 @@
 * Fri Nov 13 2026 Imre Tabur <imre.tabur@mail.ee>
+- The whole build in CMakeLists.txt: no other cmake file, no templates, no placeholders filled in.
+- Configuration packages as directories of src/main/config, RPMs by CPack without spec files.
+- Scripts find bin and lib relative to themselves; the version reaches C++ as compile definitions.
+
+* Fri Nov 13 2026 Imre Tabur <imre.tabur@mail.ee>
 - Elixir: mix.exs with the maven layout, BEAM and dependencies installed per project, ExUnit in ctest.
 - src/site/markdown documentation, installed to doc/<project>; make site, pandoc when installed.
 - src/main/sh/in/*.in configured without a list; doxygen only when installed.

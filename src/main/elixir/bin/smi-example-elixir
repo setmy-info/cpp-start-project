@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Runs the compiled Elixir application of cpp-start-project: Smi.Example.main/1 with the
+# arguments. The application and its dependencies are in lib/elixir/cpp-start-project beside the
+# bin directory of this script, in the build tree as in the installation, so no path is written
+# here. They are ERL_LIBS, so the elixir on PATH finds them; the consolidated protocols go first.
+
+SCRIPT=$0
+# A link to this script, from /usr/local/bin for example, is followed to the script itself.
+while [ -L "${SCRIPT}" ]; do
+    LINK=$(readlink "${SCRIPT}")
+    case "${LINK}" in
+        /*) SCRIPT=${LINK} ;;
+        *) SCRIPT=$(dirname -- "${SCRIPT}")/${LINK} ;;
+    esac
+done
+BIN_DIR=$(CDPATH= cd -- "$(dirname -- "${SCRIPT}")" && pwd)
+BEAM_LIBS="${BIN_DIR}/../lib/elixir/cpp-start-project"
+
+ERL_LIBS="${BEAM_LIBS}${ERL_LIBS:+:${ERL_LIBS}}"
+export ERL_LIBS
+
+exec elixir -pa "${BEAM_LIBS}/cpp_start_project/consolidated" -e 'Smi.Example.main(System.argv())' -- "$@"

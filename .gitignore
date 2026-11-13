@@ -50,8 +50,7 @@ out/
 **/*.cmake
 **.cmake
 *.cmake
-# No .cmake file is committed: the build definition is src/**/*.cmake.in, from which
-# CMakeLists.txt generates the .cmake files into target/cmake.
+# No .cmake file is committed: the whole build is CMakeLists.txt, every .cmake file is cmake output.
 
 # Elixir: Mix works under target/, these are the places it uses when run elsewhere
 /_build/

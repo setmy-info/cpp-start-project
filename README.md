@@ -46,102 +46,66 @@ verification (unit tests, integration tests incl. valgrind tests), release (no d
 ## Project layout
 
 The build is the traditional configure, build, install cycle (`./configure`, `make`,
-`make install` / `make package`) with the maven directory structure:
+`make install` / `make package`) with the maven directory structure. The whole build is the one
+`CMakeLists.txt`: there is no other cmake file, nothing is generated from a template and no file
+is copied with placeholders filled in. The sources are used as they are.
 
 ```
 CMakeLists.txt, configure       the build, like pom.xml; mix.exs for the Elixir part
-src/main/cpp, src/test/cpp      C++, built by cmake; tests run by ctest
+src/main/cpp, src/test/cpp      C++; tests run by ctest
 src/main/elixir                 Elixir: *.ex compiled to BEAM, *.exs scripts, bin/ executables
 src/test/elixir                 ExUnit tests, run by ctest
-src/main/sh                     POSIX shell: bin/, lib/, in/*.in configured, rpm/ and deb/ scriptlets
+src/main/sh                     POSIX shell: bin/, lib/, etc/, rpm/ and deb/ install scripts
 src/main/groovy, python, cl,    other interpreted languages: bin/* to bin, lib/ to lib
   cmd, erlang
 src/main/java, src/test/java    Java, maven's own place
 src/main/man/<module>/manN      man pages, gzipped into man/manN
-src/main/rpm/<module>           spec file packages: configuration per environment and machine
-src/main/resources              resources; cmake/ the build definition (*.cmake.in), elixir/ the Mix config
+src/main/config/<package>       configuration packages, an RPM each
+src/main/resources/elixir       the Mix configuration
 src/site/markdown, resources    documentation, installed to doc/<project>; make site
 target/                         everything the build writes
 ```
 
+Modules are directories, found when the project is configured: a new man page module, language
+library, configuration package or Elixir module is a new directory and `./configure`. What the
+build tree has is what the main package installs, so nothing lists files either. Only the C++
+targets are named in `CMakeLists.txt`; their sources are the `*.cpp` files of the module
+directory, so a new class needs no edit there.
+
+Scripts find what they need relative to themselves: the build tree has the layout of the
+installation (`bin`, `lib`, `man`, `etc`, `doc`), binaries find their libraries in `../lib`, and
+`bin/example` runs `bin/example.bin` in both. The version reaches C++ as compile definitions,
+`PROJECT_MODULE_VERSION_*` (see `Version.h`).
+
 Elixir: see [src/site/markdown/elixir.md](src/site/markdown/elixir.md).
-
-No `.cmake` file is in git, every one is generated. The build definition is templates,
-`*.cmake.in`, under `src/main/resources/cmake` and, for tests, `src/test/resources/cmake`; each
-configure generates the `.cmake` files from them into `target/cmake` (same tree as under `src`),
-and `CMakeLists.txt` includes only the generated ones. Edit the `.cmake.in` files. Both trees are
-laid out the same way:
-
-```
-<phase>.cmake.in                       project wide part of a phase
-<language>/<phase>.cmake.in            language wide part (optional)
-<language>/<module>/<phase>.cmake.in   module part (optional)
-```
-
-A phase is one of `variables`, `sources`, `targets`, `dependencies`, `configure`, `lib`, `bin`,
-`man`, `etc`, `var`, included in that order by `CMakeLists.txt`.
-
-Languages and modules are found from the directories (`base` module first, then alphabetical), so
-no file lists them:
-
-* **New module** - add `src/main/resources/cmake/<language>/<module>/` with only the phase files
-  it needs, and run `./configure` again.
-* **New language** - the same with a new `<language>` directory; a language wide file is needed
-  only for settings common to all its modules.
-* **Removing** a module or language - delete its directory.
-
-A language file that needs its modules earlier than after itself calls
-`INCLUDE_MODULES_CMAKE_FILES(<language directory> <phase>)`, as `src/test/resources/cmake/cpp/sources.cmake.in`
-does to collect the test sources.
-
-Helpers from `src/main/resources/cmake/functions.cmake.in` for module files:
-
-* `ADD_COPY_TARGET(<target> <destination> <glob>...)` - copies matching files, no-op without them.
-* `ADD_COPY_DIRECTORY_TARGET(<target> <destination> <directory>)` - copies a directory tree.
-* `ADD_MAN_TARGET(<target> <man directory> <section>...)` - copies and gzips man pages.
-* `CONFIGURE_DIRECTORY(<directory> <destination>)` - configures every `*.in` file (`@VAR@` only).
-
-Interpreted languages (`cmd`, `groovy`, `python`, `cl`, `elixir`, `erlang`) need no cmake file at
-all: `src/main/<language>/bin/*` is copied to `bin` and `src/main/<language>/lib` to `lib`.
 
 ### Build helpers
 
 * `src/main/sh/build/update-versions.sh 1.2.3` - sets the version in every file that has it.
 * `src/main/sh/build/check-files.sh [/opt/setmy.info]` - checks an installed package.
 
-## Spec file packages and deployment
+## Configuration packages and deployment
 
-Besides the main package that CPack builds, `make all` builds RPMs from hand written spec files:
-configuration packages per runtime environment and machine, the way the configuration projects
-(nginx, nftables, mosquitto, keycloak) build them, but here, with the rest of the build. The RPMs
-are written to the project directory; `make clean` removes them.
+`make package` builds, beside the main package, one RPM per directory of `src/main/config`, with
+CPack like the main package and without a spec file:
 
 ```
-src/main/rpm/<module>/*.spec        a spec, used as it is
-src/main/rpm/<module>/*.spec.in     a spec with @VARIABLE@ placeholders
-src/main/rpm/<module>/fedora/...    the files of the packages, *.in configured; with README.md and
-                                    the rest of the module directory this is the Source0 tarball
+src/main/config/<package>/
+    etc/..., usr/...       installed at / as they are; the files below etc are %config(noreplace)
+    description            first line the summary, the rest the description
+    requires, conflicts    one package per line, a version allowed: nginx >= 1.20
+    deploy-targets         where it is deployed: test live-fe; every environment without it
+    pre.install.sh, post.install.sh, pre.uninstall.sh, post.uninstall.sh   scriptlets ($1 as rpm)
 ```
 
-`src/main/rpm/example` shows every part. A module is a directory, nothing lists it. Each spec
-needs `Source0`, the tarball of its module directory, unpacked to the name of the tarball without
-`.tar.gz` (`%autosetup -n %{srcname}-%{version}`).
-
-**Placeholders.** At package build time: `@VARIABLE@` in `*.in` files, any cmake variable, and
-every `SMI_*` environment variable of `./configure`, so a value the CI job sets reaches the
-package. Specs also get the macros `%{smi_version}` (the project version, `1.0.0~SNAPSHOT` for a
-snapshot), `%{smi_provider}`, `%{smi_prefix}` and `%{smi_var}`. At install time: the scriptlets,
-for example `sed` over `# NB! TEST ONLY: ` lines, and `SMI_STAGE` (`published` or `draft`), which
-`smi-incoming-deploy` sets. Secrets do not go into packages.
+`src/main/config/smi-example-config` and `smi-example-config-test` show every part. A setting of
+one environment is written into the files of that package, or switched on at install time by its
+scriptlet, as the `# NB! TEST ONLY: ` lines are; `SMI_STAGE` (`published` or `draft`) is set by
+`smi-incoming-deploy`.
 
 **Where a package goes.** A deploy target is a runtime environment, `local`, `dev`, `test`,
 `prelive`, `live` (`SMI_ENVIRONMENTS`), or an environment and a machine role, `live-fe`,
-`live-be`. A spec names its targets in its first lines; without the line its packages go to every
-environment. The main package goes to `SMI_PACKAGE_DEPLOY_TARGETS`.
-
-```
-# smi-deploy-targets: test live-fe
-```
+`live-be`. The main package goes to `SMI_PACKAGE_DEPLOY_TARGETS`, every environment by default.
 
 **Deployment.** With `smi-deploy` of setmy-info-scripts, which uploads to the machine and hands the
 package to `setmy-info-deploy.path`, which installs it with `smi-incoming-deploy`:
@@ -161,32 +125,18 @@ The machines are not in the repository: `SMI_DEPLOY_<TARGET>_HOSTS` (`SMI_DEPLOY
 defaults for one target. Packages go in dependency order, the ones others require first. The
 `Jenkinsfile`, from jenkinsfile-starter, runs these targets per branch and environment.
 
-**Moving a configuration project here.** For a project with `rpm/*.spec`, `rpm/Makefile` and
-`fedora/`:
-
-```sh
-mkdir -p src/main/rpm/nftables
-cp -a ../nftables/fedora ../nftables/*.md ../nftables/rpm/*.spec src/main/rpm/nftables/
-```
-
-then put a `# smi-deploy-targets:` line on top of each spec, taken from the `SKIP_*` lists and
-`*_HOST` variables of its `rpm/Makefile`, remove its `%doc` and `%license` lines, and set the
-`SMI_DEPLOY_*_HOSTS` in Jenkins. No package installs into `/usr/share/doc`, the build stops on one
-that does; documentation goes to `src/site`. Otherwise the specs stay as they are; a literal
-`Version:` is updated by `update-versions.sh`.
-
 ## Adding class
 
-Affected files are like these:
+Affected files are like these, no build file among them:
 
 ```
 new file:   src/main/cpp/library/CommandLineParameters.cpp
 new file:   src/main/cpp/library/include/CommandLineParameters.h
 new file:   src/test/cpp/library/include/CommandLineParametersTest.h
-modified:   src/main/resources/cmake/cpp/library/sources.txt
 modified:   src/test/cpp/library/include/Tests.h
-modified:   src/test/resources/cmake/cpp/library/tests.txt
 ```
+
+A new test suite also gets its `ADD_TEST` lines in section 6 of `CMakeLists.txt`.
 
 ## Experiments with Windows
 

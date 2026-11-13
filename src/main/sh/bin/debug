@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Author: Imre Tabur
+# Debugs the test binary of the directory of this script with kdbg.
+BIN_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+LD_LIBRARY_PATH="${BIN_DIR}/../lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+export LD_LIBRARY_PATH
+
+exec kdbg "${BIN_DIR}/test.bin" "$@"

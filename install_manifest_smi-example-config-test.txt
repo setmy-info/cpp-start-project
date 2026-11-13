@@ -1,0 +1,1 @@
+//etc/smi-example/conf.d/environment.conf
