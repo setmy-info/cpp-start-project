@@ -118,6 +118,24 @@ ELSEIF(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
     set(CPACK_ENABLE_FREEBSD_PKG ON CACHE BOOL "Enable pkg(8) generator in CPack")
 ENDIF()
 
+# The runtime environments, in the order of the delivery pipeline. A deploy target is one of them,
+# or one of them with a machine role: live-fe, live-be.
+SET (SMI_ENVIRONMENTS "local;dev;test;prelive;live" CACHE STRING "Runtime environments")
+
+# Every environment variable named SMI_* becomes a variable of the same name, unless one is
+# already set with -D, so a value the CI job sets, a host name or an address of an environment,
+# reaches the @SMI_...@ placeholders of the *.in files. They are read when ./configure runs.
+# Secrets do not belong here: what is configured into a package is readable by anyone who has it.
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E environment OUTPUT_VARIABLE _SMI_ENVIRONMENT)
+STRING(REGEX MATCHALL "(^|\n)SMI_[A-Za-z0-9_]+=" _SMI_ENVIRONMENT_NAMES "${_SMI_ENVIRONMENT}")
+FOREACH(_SMI_ENVIRONMENT_NAME IN LISTS _SMI_ENVIRONMENT_NAMES)
+    STRING(REGEX REPLACE "^\n?(SMI_[A-Za-z0-9_]+)=$" "\\1" _SMI_ENVIRONMENT_NAME "${_SMI_ENVIRONMENT_NAME}")
+    IF(NOT DEFINED ${_SMI_ENVIRONMENT_NAME})
+        SET (${_SMI_ENVIRONMENT_NAME} "$ENV{${_SMI_ENVIRONMENT_NAME}}")
+        MESSAGE("-- from the environment: ${_SMI_ENVIRONMENT_NAME}")
+    ENDIF()
+ENDFOREACH()
+
 INCLUDE_LANGUAGES_CMAKE_FILES(${MAIN_CMAKE_PATH} variables)
 
 MESSAGE("-- CMAKE_SYSTEM_INFO_FILE: ${CMAKE_SYSTEM_INFO_FILE}")
@@ -142,6 +160,7 @@ MESSAGE("-- MAN_OUTPUT_PATH: ${MAN_OUTPUT_PATH}")
 MESSAGE("-- DOC_OUTPUT_PATH: ${DOC_OUTPUT_PATH}")
 MESSAGE("-- ETC_OUTPUT_PATH: ${ETC_OUTPUT_PATH}")
 MESSAGE("-- SMI_RUNTIME_VAR_PATH: ${SMI_RUNTIME_VAR_PATH}")
+MESSAGE("-- SMI_ENVIRONMENTS: ${SMI_ENVIRONMENTS}")
 MESSAGE("-- ETC_PROFILED_OUTPUT_PATH: ${ETC_PROFILED_OUTPUT_PATH}")
 MESSAGE("-- ETC_SYSTEMD_OUTPUT_PATH: ${ETC_SYSTEMD_OUTPUT_PATH}")
 MESSAGE("-- INCLUDE_OUTPUT_PATH: ${INCLUDE_OUTPUT_PATH}")

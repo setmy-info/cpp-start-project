@@ -86,7 +86,10 @@ endmacro()
 # does nothing, so a module whose sources are not written yet builds without an edit. The globs
 # are checked again by every build, which reconfigures when a file has been added or removed.
 function(ADD_COPY_TARGET TARGET_NAME DESTINATION)
-    FILE(GLOB _FILES LIST_DIRECTORIES false CONFIGURE_DEPENDS ${ARGN})
+    SET(_FILES "")
+    IF(ARGN)
+        FILE(GLOB _FILES LIST_DIRECTORIES false CONFIGURE_DEPENDS ${ARGN})
+    ENDIF()
     LIST(FILTER _FILES EXCLUDE REGEX "/\\.empty$")
     IF(_FILES)
         ADD_CUSTOM_TARGET(${TARGET_NAME}

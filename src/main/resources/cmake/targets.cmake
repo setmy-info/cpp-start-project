@@ -17,8 +17,8 @@ ADD_COPY_TARGET(buildPythonScripts            ${BINARY_OUTPUT_PATH}  ${MAIN_PYTH
 ADD_COPY_DIRECTORY_TARGET(buildPythonLib      ${LIBRARY_OUTPUT_PATH} ${MAIN_PYTHON_SOURCES_PATH}/lib)
 ADD_COPY_TARGET(buildCLScripts                ${BINARY_OUTPUT_PATH}  ${MAIN_COMMON_LISP_SOURCES_PATH}/bin/*)
 ADD_COPY_DIRECTORY_TARGET(buildCLLib          ${LIBRARY_OUTPUT_PATH} ${MAIN_COMMON_LISP_SOURCES_PATH}/lib)
+# Elixir: executable scripts here, the rest of src/main/elixir is the elixir language of cmake.
 ADD_COPY_TARGET(buildElixirScripts            ${BINARY_OUTPUT_PATH}  ${MAIN_ELIXIR_SOURCES_PATH}/bin/*)
-ADD_COPY_DIRECTORY_TARGET(buildElixirLib      ${LIBRARY_OUTPUT_PATH} ${MAIN_ELIXIR_SOURCES_PATH}/lib)
 ADD_COPY_TARGET(buildErlangScripts            ${BINARY_OUTPUT_PATH}  ${MAIN_ERLANG_SOURCES_PATH}/bin/*)
 ADD_COPY_DIRECTORY_TARGET(buildErlangLib      ${LIBRARY_OUTPUT_PATH} ${MAIN_ERLANG_SOURCES_PATH}/lib)
 

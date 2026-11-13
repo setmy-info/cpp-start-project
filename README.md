@@ -46,7 +46,27 @@ verification (unit tests, integration tests incl. valgrind tests), release (no d
 ## Project layout
 
 The build is the traditional configure, build, install cycle (`./configure`, `make`,
-`make install` / `make package`) with a maven like directory structure. The cmake files are under
+`make install` / `make package`) with the maven directory structure:
+
+```
+CMakeLists.txt, configure       the build, like pom.xml; mix.exs for the Elixir part
+src/main/cpp, src/test/cpp      C++, built by cmake; tests run by ctest
+src/main/elixir                 Elixir: *.ex compiled to BEAM, *.exs scripts, bin/ executables
+src/test/elixir                 ExUnit tests, run by ctest
+src/main/sh                     POSIX shell: bin/, lib/, in/*.in configured, rpm/ and deb/ scriptlets
+src/main/groovy, python, cl,    other interpreted languages: bin/* to bin, lib/ to lib
+  cmd, erlang
+src/main/java, src/test/java    Java, maven's own place
+src/main/man/<module>/manN      man pages, gzipped into man/manN
+src/main/rpm/<module>           spec file packages: configuration per environment and machine
+src/main/resources              resources; cmake/ is the build definition, elixir/ the Mix config
+src/site/markdown, resources    documentation, installed to doc/<project>; make site
+target/                         everything the build writes
+```
+
+Elixir: see [src/site/markdown/elixir.md](src/site/markdown/elixir.md).
+
+The cmake files of the build definition are laid out as follows. The cmake files are under
 `src/main/resources/cmake` and, for tests, `src/test/resources/cmake`, both laid out the same way:
 
 ```
@@ -85,6 +105,72 @@ all: `src/main/<language>/bin/*` is copied to `bin` and `src/main/<language>/lib
 
 * `src/main/sh/build/update-versions.sh 1.2.3` - sets the version in every file that has it.
 * `src/main/sh/build/check-files.sh [/opt/setmy.info]` - checks an installed package.
+
+## Spec file packages and deployment
+
+Besides the main package that CPack builds, `make all` builds RPMs from hand written spec files:
+configuration packages per runtime environment and machine, the way the configuration projects
+(nginx, nftables, mosquitto, keycloak) build them, but here, with the rest of the build. The RPMs
+are written to the project directory; `make clean` removes them.
+
+```
+src/main/rpm/<module>/*.spec        a spec, used as it is
+src/main/rpm/<module>/*.spec.in     a spec with @VARIABLE@ placeholders
+src/main/rpm/<module>/fedora/...    the files of the packages, *.in configured; with README.md and
+                                    the rest of the module directory this is the Source0 tarball
+```
+
+`src/main/rpm/example` shows every part. A module is a directory, nothing lists it. Each spec
+needs `Source0`, the tarball of its module directory, unpacked to the name of the tarball without
+`.tar.gz` (`%autosetup -n %{srcname}-%{version}`).
+
+**Placeholders.** At package build time: `@VARIABLE@` in `*.in` files, any cmake variable, and
+every `SMI_*` environment variable of `./configure`, so a value the CI job sets reaches the
+package. Specs also get the macros `%{smi_version}` (the project version, `1.0.0~SNAPSHOT` for a
+snapshot), `%{smi_provider}`, `%{smi_prefix}` and `%{smi_var}`. At install time: the scriptlets,
+for example `sed` over `# NB! TEST ONLY: ` lines, and `SMI_STAGE` (`published` or `draft`), which
+`smi-incoming-deploy` sets. Secrets do not go into packages.
+
+**Where a package goes.** A deploy target is a runtime environment, `local`, `dev`, `test`,
+`prelive`, `live` (`SMI_ENVIRONMENTS`), or an environment and a machine role, `live-fe`,
+`live-be`. A spec names its targets in its first lines; without the line its packages go to every
+environment. The main package goes to `SMI_PACKAGE_DEPLOY_TARGETS`.
+
+```
+# smi-deploy-targets: test live-fe
+```
+
+**Deployment.** With `smi-deploy` of setmy-info-scripts, which uploads to the machine and hands the
+package to `setmy-info-deploy.path`, which installs it with `smi-incoming-deploy`:
+
+```sh
+make upload-test      # copy the packages to the upload directory of the test machines
+make handover-test    # move them into the incoming directory, which installs them
+make deploy-test      # both
+make deploy-live      # live, then every live-<role>
+SMI_DEPLOY_STAGE=draft make handover-live   # to incoming/draft instead
+make deploy-help      # every target and its packages
+```
+
+The machines are not in the repository: `SMI_DEPLOY_<TARGET>_HOSTS` (`SMI_DEPLOY_TEST_HOSTS`,
+`SMI_DEPLOY_LIVE_FE_HOSTS`), `[user@]host[:port]`, several separated by spaces, set in Jenkins.
+`SMI_DEPLOY_<TARGET>_USER`, `_PORT`, `_REMOTE_DIR` and `_INCOMING_DIR` override the smi-deploy
+defaults for one target. Packages go in dependency order, the ones others require first. The
+`Jenkinsfile`, from jenkinsfile-starter, runs these targets per branch and environment.
+
+**Moving a configuration project here.** For a project with `rpm/*.spec`, `rpm/Makefile` and
+`fedora/`:
+
+```sh
+mkdir -p src/main/rpm/nftables
+cp -a ../nftables/fedora ../nftables/*.md ../nftables/rpm/*.spec src/main/rpm/nftables/
+```
+
+then put a `# smi-deploy-targets:` line on top of each spec, taken from the `SKIP_*` lists and
+`*_HOST` variables of its `rpm/Makefile`, remove its `%doc` and `%license` lines, and set the
+`SMI_DEPLOY_*_HOSTS` in Jenkins. No package installs into `/usr/share/doc`, the build stops on one
+that does; documentation goes to `src/site`. Otherwise the specs stay as they are; a literal
+`Version:` is updated by `update-versions.sh`.
 
 ## Adding class
 

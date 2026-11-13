@@ -6,7 +6,7 @@ SET (SCRIPT_LANGUAGE_TARGETS
     buildGroovyScripts  buildGroovyLib
     buildPythonScripts  buildPythonLib
     buildCLScripts      buildCLLib
-    buildElixirScripts  buildElixirLib
+    buildElixirScripts
     buildErlangScripts  buildErlangLib)
 ADD_DEPENDENCIES(build ${SCRIPT_LANGUAGE_TARGETS})
 FOREACH(SCRIPT_LANGUAGE_TARGET IN LISTS SCRIPT_LANGUAGE_TARGETS)

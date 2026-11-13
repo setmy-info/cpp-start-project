@@ -48,3 +48,15 @@ out/
 .junie
 *.dmg
 **/*.cmake
+**.cmake
+*.cmake
+# The rules above keep what cmake generates out of git. The cmake files under src are the
+# build definition, written by hand like pom.xml, and are committed.
+!/src/**/*.cmake
+
+# Elixir: Mix works under target/, these are the places it uses when run elsewhere
+/_build/
+/deps/
+.elixir_ls/
+erl_crash.dump
+*.ez

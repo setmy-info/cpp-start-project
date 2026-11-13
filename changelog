@@ -1,4 +1,14 @@
 * Fri Nov 13 2026 Imre Tabur <imre.tabur@mail.ee>
+- Elixir: mix.exs with the maven layout, BEAM and dependencies installed per project, ExUnit in ctest.
+- src/site/markdown documentation, installed to doc/<project>; make site, pandoc when installed.
+- src/main/sh/in/*.in configured without a list; doxygen only when installed.
+
+* Fri Nov 13 2026 Imre Tabur <imre.tabur@mail.ee>
+- RPMs from spec files of src/main/rpm, built by make all into the project directory.
+- Deploy targets per runtime environment and machine role, smi-deploy upload and hand over.
+- Jenkinsfile from jenkinsfile-starter 1.3.0 with the build and deploy steps.
+
+* Fri Nov 13 2026 Imre Tabur <imre.tabur@mail.ee>
 - Languages and modules are found from their directories, no aggregator lists them.
 - Copy targets do nothing when their sources do not exist, no echo stubs to edit.
 - rpm and deb uninstall scripts keep the installation on an upgrade; deb scripts packaged.

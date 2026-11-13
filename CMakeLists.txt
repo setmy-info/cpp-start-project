@@ -40,9 +40,11 @@ INCLUDE(./src/main/resources/cmake/etc.cmake)
 INCLUDE(./src/test/resources/cmake/etc.cmake)
 INCLUDE(./src/main/resources/cmake/var.cmake)
 INCLUDE(./src/test/resources/cmake/var.cmake)
+INCLUDE(./src/main/resources/cmake/site.cmake)
 
 # PLACEHOLDER-PRE-PACKAGING #
 
 INCLUDE(./src/main/resources/cmake/packaging.cmake)
+INCLUDE(./src/main/resources/cmake/deploy.cmake)
 
 # PLACEHOLDER-END #

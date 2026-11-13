@@ -1,0 +1,42 @@
+# The common package: no smi-deploy-targets line, so it goes to every environment.
+# A .spec.in: @VARIABLE@ placeholders are filled in when the project is configured.
+%global srcname smi-example-conf
+
+Name:           smi-example-config
+Version:        @RPM_VERSION@
+Release:        1
+Summary:        Example configuration package of @PROJECT_NAME@
+
+License:        @PROJECT_LICENSE@
+Vendor:         @PROJECT_VENDOR@
+URL:            @PROJECT_WWW@
+Source0:        %{srcname}-%{version}.tar.gz
+
+BuildArch:      noarch
+
+%description
+The configuration every machine shares. Its example.conf is configured when
+the project is configured, from example.conf.in, so it carries the project
+version and the runtime var directory of the build.
+
+%prep
+%autosetup -n %{srcname}-%{version}
+
+%build
+
+%install
+install -d -m 0755 %{buildroot}%{_sysconfdir}/smi-example/conf.d
+install -m 0644 fedora/etc/smi-example/example.conf %{buildroot}%{_sysconfdir}/smi-example/example.conf
+
+%post
+# SMI_STAGE is set by smi-incoming-deploy: published, or draft for the draft directory.
+echo "smi-example-config installed for the ${SMI_STAGE:-published} stage"
+
+%files
+%dir %{_sysconfdir}/smi-example
+%dir %{_sysconfdir}/smi-example/conf.d
+%config(noreplace) %{_sysconfdir}/smi-example/example.conf
+
+%changelog
+* Fri Nov 13 2026 @PROJECT_MAINTAINER@ - 1.0.0-1
+- Example package of the spec file build

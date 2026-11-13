@@ -1,7 +1,6 @@
 # PLACEHOLDER-BEGIN #
 MESSAGE("-- cpp configure.cmake")
 
-CONFIGURE_FILE("${MAIN_SH_SOURCES_PATH}/in/debug.in"         "${BINARY_OUTPUT_PATH}/debug")
-CONFIGURE_FILE("${MAIN_SH_SOURCES_PATH}/in/example.in"       "${BINARY_OUTPUT_PATH}/example")
+# debug and example of src/main/sh/in are configured by sh/base/configure.cmake.
 
 # PLACEHOLDER-END #

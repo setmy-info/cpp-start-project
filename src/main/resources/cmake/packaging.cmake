@@ -117,6 +117,10 @@ ENDIF()
 
 # PLACEHOLDER-PRE-PACK#
 
+# include(CPack) reuses CPACK_GENERATOR for the source package configuration and leaves it holding
+# the source generators, so what the binary packages are built with is kept here for deploy.cmake.
+SET(PACKAGE_GENERATORS "${CPACK_GENERATOR}")
+
 include(CPack)
 
 # PLACEHOLDER-END #

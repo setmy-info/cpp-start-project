@@ -1,0 +1,6 @@
+# smi-config-version @PROJECT_VERSION@
+# Configured from example.conf.in when the project was configured.
+var_directory = @SMI_RUNTIME_VAR_PATH@
+# Any SMI_* environment variable of the build, for example of the CI job, is a placeholder too.
+# It is empty when the variable was not set.
+example_host = @SMI_EXAMPLE_HOST@

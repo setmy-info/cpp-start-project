@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Sets the project version everywhere it is written: CMakeLists.txt, Doxyfile, Dockerfile and
-# packages-build.sh. Run from the project root:
+# Sets the project version everywhere it is written: CMakeLists.txt, Doxyfile, Dockerfile,
+# packages-build.sh and the spec file packages of src/main/rpm. Run from the project root:
 #
 #   ./src/main/sh/build/update-versions.sh 1.2.3
 
@@ -38,5 +38,18 @@ replace Doxyfile "s/^\(PROJECT_NUMBER *=\).*/\1 ${NEW_VERSION}/"
 replace Dockerfile "s/${PROJECT_NAME}-[0-9][0-9.]*[0-9]\./${PROJECT_NAME}-${NEW_VERSION}./g"
 replace src/main/sh/build/packages-build.sh "s/export PROJECT_VERSION=\"[0-9][0-9.]*\"/export PROJECT_VERSION=\"${NEW_VERSION}\"/"
 replace README.md "s/PROJECT_VERSION=[0-9][0-9.]*[0-9]/PROJECT_VERSION=${NEW_VERSION}/g"
+
+# Spec file packages: a spec that writes its Version as a number, rather than @RPM_VERSION@ or
+# %{smi_version}, and the "smi-config-version <version>" line a configuration file carries so the
+# installed file says which version it is. Templates are left alone, they take the version from
+# the build.
+for SPEC in src/main/rpm/*/*.spec; do
+    replace "${SPEC}" "s/^\(Version: *\)[0-9][0-9.]*\$/\1${NEW_VERSION}/"
+done
+if [ -d src/main/rpm ]; then
+    grep -rl 'smi-config-version [0-9]' src/main/rpm 2>/dev/null | while IFS= read -r CONFIG_FILE; do
+        replace "${CONFIG_FILE}" "s/\(smi-config-version \)[0-9][0-9.]*/\1${NEW_VERSION}/g"
+    done
+fi
 
 exit 0
