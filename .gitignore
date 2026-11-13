@@ -50,9 +50,8 @@ out/
 **/*.cmake
 **.cmake
 *.cmake
-# The rules above keep what cmake generates out of git. The cmake files under src are the
-# build definition, written by hand like pom.xml, and are committed.
-!/src/**/*.cmake
+# No .cmake file is committed: the build definition is src/**/*.cmake.in, from which
+# CMakeLists.txt generates the .cmake files into target/cmake.
 
 # Elixir: Mix works under target/, these are the places it uses when run elsewhere
 /_build/

@@ -18,7 +18,7 @@ if command -v systemctl >/dev/null 2>&1; then
 fi
 #ln -f -s /opt/${SMI_PROVIDER}/bin/smi-example-binary /opt/${SMI_PROVIDER}/bin/smi-test
 #ln -f -s /opt/${SMI_PROVIDER}/bin/smi-example-binary /opt/${SMI_PROVIDER}/bin/smi-stealer
-# Not packaged, see src/main/resources/cmake/sh/base/var.cmake.
+# Not packaged, see src/main/resources/cmake/sh/base/var.cmake.in.
 mkdir -p /var/opt/${SMI_PROVIDER}
 if command -v restorecon >/dev/null 2>&1; then
     restorecon -R /var/opt/${SMI_PROVIDER} || true

@@ -59,20 +59,23 @@ src/main/groovy, python, cl,    other interpreted languages: bin/* to bin, lib/ 
 src/main/java, src/test/java    Java, maven's own place
 src/main/man/<module>/manN      man pages, gzipped into man/manN
 src/main/rpm/<module>           spec file packages: configuration per environment and machine
-src/main/resources              resources; cmake/ is the build definition, elixir/ the Mix config
+src/main/resources              resources; cmake/ the build definition (*.cmake.in), elixir/ the Mix config
 src/site/markdown, resources    documentation, installed to doc/<project>; make site
 target/                         everything the build writes
 ```
 
 Elixir: see [src/site/markdown/elixir.md](src/site/markdown/elixir.md).
 
-The cmake files of the build definition are laid out as follows. The cmake files are under
-`src/main/resources/cmake` and, for tests, `src/test/resources/cmake`, both laid out the same way:
+No `.cmake` file is in git, every one is generated. The build definition is templates,
+`*.cmake.in`, under `src/main/resources/cmake` and, for tests, `src/test/resources/cmake`; each
+configure generates the `.cmake` files from them into `target/cmake` (same tree as under `src`),
+and `CMakeLists.txt` includes only the generated ones. Edit the `.cmake.in` files. Both trees are
+laid out the same way:
 
 ```
-<phase>.cmake                       project wide part of a phase
-<language>/<phase>.cmake            language wide part (optional)
-<language>/<module>/<phase>.cmake   module part (optional)
+<phase>.cmake.in                       project wide part of a phase
+<language>/<phase>.cmake.in            language wide part (optional)
+<language>/<module>/<phase>.cmake.in   module part (optional)
 ```
 
 A phase is one of `variables`, `sources`, `targets`, `dependencies`, `configure`, `lib`, `bin`,
@@ -88,10 +91,10 @@ no file lists them:
 * **Removing** a module or language - delete its directory.
 
 A language file that needs its modules earlier than after itself calls
-`INCLUDE_MODULES_CMAKE_FILES(<language directory> <phase>)`, as `src/test/resources/cmake/cpp/sources.cmake`
+`INCLUDE_MODULES_CMAKE_FILES(<language directory> <phase>)`, as `src/test/resources/cmake/cpp/sources.cmake.in`
 does to collect the test sources.
 
-Helpers from `src/main/resources/cmake/functions.cmake` for module files:
+Helpers from `src/main/resources/cmake/functions.cmake.in` for module files:
 
 * `ADD_COPY_TARGET(<target> <destination> <glob>...)` - copies matching files, no-op without them.
 * `ADD_COPY_DIRECTORY_TARGET(<target> <destination> <directory>)` - copies a directory tree.

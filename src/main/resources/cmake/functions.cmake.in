@@ -16,11 +16,12 @@ macro(INCLUDE_DIRECTORIES_WINDOWS)
     ENDIF()
 endmacro()
 
-# Project layout, the same under src/main/resources/cmake and src/test/resources/cmake:
+# Project layout, the same under src/main/resources/cmake and src/test/resources/cmake, as
+# templates <name>.cmake.in from which CMakeLists.txt generates <name>.cmake into target/cmake:
 #
-#   <phase>.cmake                     project wide part of a phase
-#   <language>/<phase>.cmake          language wide part, optional
-#   <language>/<module>/<phase>.cmake module part, optional
+#   <phase>.cmake.in                     project wide part of a phase
+#   <language>/<phase>.cmake.in          language wide part, optional
+#   <language>/<module>/<phase>.cmake.in module part, optional
 #
 # A phase is one of variables, sources, targets, dependencies, configure, lib, bin, man, etc, var.
 # Languages and modules are found from the directories, so adding or removing a language or a

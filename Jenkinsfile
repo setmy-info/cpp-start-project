@@ -170,7 +170,7 @@ pipeline {
 
         // The machines of each deploy target are not in this file, they are configuration of
         // Jenkins: global properties or the folder of the job, one variable per target, read by
-        // make deploy-<target> (see src/main/resources/cmake/deploy.cmake and make deploy-help):
+        // make deploy-<target> (see src/main/resources/cmake/deploy.cmake.in and make deploy-help):
         //   SMI_DEPLOY_DEV_HOSTS, SMI_DEPLOY_TEST_HOSTS, SMI_DEPLOY_PRELIVE_HOSTS,
         //   SMI_DEPLOY_LIVE_HOSTS, and SMI_DEPLOY_<ENVIRONMENT>_<ROLE>_HOSTS for machine roles,
         //   SMI_DEPLOY_LIVE_FE_HOSTS for example. [user@]host[:port], several separated by spaces.
